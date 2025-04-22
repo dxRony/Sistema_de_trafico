@@ -1,0 +1,95 @@
+					ESPECIFICACIONES DEL PROGRAMA
+Dessarrollar sistema de simulacion de trafico que gestion la circulacion de vehiculos en una ciudad, 
+se priorizara vehiculos especiales y usando algoritmos de analisis, busqueda y ordenacion a traves de 
+estructuras de datos implementadas desde cero.
+
+- Usar edd lineales como listas, colas, pilas y arboles para representar el flujo vehicular y semaforos inteligentes.
+- Utilizar funciones hash para manejo de placas vehiculares y busquedas eficientes.
+- Implementar arboles AVL para calcular el nivel de dificultad de las rutas y coordinar intersecciones complejas.
+
+					DESCRIPCION GENERAL
+Se simulara un mapa urbano divido en zonas y carriles con trafico constante. Cada carril funciona como una cola
+donde se encolan vehiculos con distintos niveles de prioridad. El sistema determina el orden de paso usando una
+cola de prioridad basada en tipo de vehiculo, tiempo de espera y direccion.
+
+Las intersecciones se almacenaran como nodos de un arbol avl, donde se define la complejidad o carga de una ruta. 
+Se usara un sistema de historial que permite analizar el flujo vehicular, tiempos de espera y eventos importantes
+registrados en una pila de eventos.
+
+					ESPECIFICACIONES DEL SISTEMA
+	1. Estructura de la ciudad:
+- Representada con matrices ortogonales 2D o 3D de nodos conectados.
+- Cada nodo representa una interseccion, semaforo o cruce.
+- Las rutas deben construirse con estructuras enlazadas, no arreglos planos.
+
+	2. Vehiculos y Prioridades:
+- Cada vehiculo tendra:
+	* Tipo (Ambulancia, Policia, Transporte Publico, Particular).
+	* Placa unica (hash).
+	* Tiempo de espera.
+	* Nivel de urgencia.
+- Los vehiculos se almacenan en una cola de prioridad manual (implementacion tipo heap o lista ordenada).
+
+	3. Intersecciones y Arbol AVL:
+- Cada interseccion de guarda como un nodo en un arbol AVL
+- El valor del nodo se representa representa el trafico o complejidad (vehiculos procesados, bloqueos, etc).
+- Se permite busqueda, insercion y reorganizacion de rutas en O(log n).
+- Arboles reequilibran las rutas dinamicamente para encontrar la ruta mas fluida.
+
+	4. Registro de eventos en pila:
+- Cada accion relevante se almacena en una pila:
+	* Vehiculo que cruzo
+	* Prioridad atendida
+	* Tiempo de paso
+	* Cambios de semaforo o bloqueos
+- Esta pila permite deshacer las ultimas acciones para analisis o simulacion paso a paso.
+
+	5. Registro de Placas con Hash:
+- Uso de tabla hash implementada desde cero.
+- Esta permite:
+	* Busqueda rapida de vehiculos.
+	* Evitar colisiones por placas duplicadas.
+	* Consulta sobre vehiculos que ya cruzaron o estan en espera.
+
+	6. Ordenamiento y Clasificacion:
+- Los reportes pueden ordenarse por:
+	* Tiempo promedio de espera.
+	* Tipo de vehiculo.
+	* Numero de vehiculos atendidos por carril.
+- Se debe implementar y comparar al menos 3 metodos de ordenamiento:
+	* Insercion directa.
+	* QuickSort.
+	* Metodo de la sacudida.
+
+	7. Simulacion del trafico:
+- El sistema aceptara vehiculos de forma:
+	* Manual (ingreso manualmente al sistema).
+	* Por archivo (entrada controlada).
+- El sistema decide que vehiculo pasa basandose en:
+	- Nivel de prioridad.
+	- Tiempo de espera.
+	- Complejidad de la interseccion (extraido del arbol).
+
+	8. Reportes de la simulacion:
+Al finalizar la simulacion o en puntos de control preestablecidos, se generaran reportes que incluiran:
+	- Ranking de vehiculos por nivel de prioridad y tiempo de cruce.
+	- Cantidad total de vehiculos que cruzaron por cada carril.
+	- Tiempo promedio de espera por tipo de vehiculo.
+	- Grafico de intersecciones mas congestionadas, basado en la informacion del arbol:
+		* Un recorrido del arbol impreso en consola (in-order, pre-order o post-order).
+		* Un archivo grafico (PNG o JPG) generado a partir del arbol.
+	- Lista de placas duplicadas o en conflicto, obtenidas desde la tabla hash.
+	- Registro de los ultimos 20 eventos relevantes del sistema, almacenados en la pila.
+
+	9. Reportes de estado en tiempo real:
+Durante la ejecucion de la simulacion, el sistema podra generar reportes del estado actual del trafico como:
+	- Visualizacion en consola del contenido actual de cada cola, simulando el flujo vehicular por carril.
+	- Identificacion del carril mas congestionado o mas fluido, calculado por el conteo de vehiculos en espera. 
+
+	10. Archivo de entrada:
+El sistema leera un archivo llamado trafico.csv con el formato:
+	tipo_vehiculo,placa,interseccion_origen,interseccion_destino,prioridad,tiempo_espera
+
+Ejemplo:
+	- AMBULANCIA,GUA-123A,A1,B3,5,3
+	- POLICIA,GUA-222B,A1,A2,4,5

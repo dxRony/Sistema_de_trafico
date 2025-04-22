@@ -1,0 +1,29 @@
+					Abstraccion de objetos
+* Vehiculo
+	Atributos:
+		- tipo 					enum
+		- placa					string
+		- interseccionOrigen	string
+		- interseccionDestino	string
+		- prioridad				int
+		- tiempoDeEspera		int
+
+* Interseccion
+	Atributos:
+		- complejidad int
+
+* Nodo
+	
+* Pila
+
+* Cola
+
+* ArbolAVL
+
+* TablaHash
+
+* Matriz3D
+
+Dudas:
+-Para que usar matriz 3d, si con una matriz 2d bastaria?
+-Como se define la complejidad de una interseccion?
