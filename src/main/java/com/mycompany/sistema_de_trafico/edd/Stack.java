@@ -1,4 +1,4 @@
-package com.mycompany.edd;
+package com.mycompany.sistema_de_trafico.edd;
 
 public class Stack<T> {
     private Node<T> top;

@@ -1,5 +1,5 @@
 					ESPECIFICACIONES DEL PROGRAMA
-Dessarrollar sistema de simulacion de trafico que gestion la circulacion de vehiculos en una ciudad, 
+Dessarrollar sistema de simulacion de trafico que gestiona la circulacion de vehiculos en una ciudad, 
 se priorizara vehiculos especiales y usando algoritmos de analisis, busqueda y ordenacion a traves de 
 estructuras de datos implementadas desde cero.
 
@@ -9,8 +9,8 @@ estructuras de datos implementadas desde cero.
 
 					DESCRIPCION GENERAL
 Se simulara un mapa urbano divido en zonas y carriles con trafico constante. Cada carril funciona como una cola
-donde se encolan vehiculos con distintos niveles de prioridad. El sistema determina el orden de paso usando una
-cola de prioridad basada en tipo de vehiculo, tiempo de espera y direccion.
+donde se encolan vehiculos con distintos niveles de prioridad. El sistema determina el 
+orden de paso usando una cola de prioridad basada en tipo de vehiculo, tiempo de espera y direccion.
 
 Las intersecciones se almacenaran como nodos de un arbol avl, donde se define la complejidad o carga de una ruta. 
 Se usara un sistema de historial que permite analizar el flujo vehicular, tiempos de espera y eventos importantes
@@ -93,3 +93,11 @@ El sistema leera un archivo llamado trafico.csv con el formato:
 Ejemplo:
 	- AMBULANCIA,GUA-123A,A1,B3,5,3
 	- POLICIA,GUA-222B,A1,A2,4,5
+
+
+	Terminar cola de prioridad
+	Hacer tabla hash
+	Hacer el arbol
+
+
+	

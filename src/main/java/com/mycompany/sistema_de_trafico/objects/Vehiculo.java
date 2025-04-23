@@ -1,5 +1,6 @@
-package com.mycompany.sistema_de_trafico.objetos;
+package com.mycompany.sistema_de_trafico.objects;
 
+import com.mycompany.sistema_de_trafico.enums.Direccion;
 import com.mycompany.sistema_de_trafico.enums.TipoVehiculo;
 
 public class Vehiculo {
@@ -9,7 +10,19 @@ public class Vehiculo {
     private String interseccionDestino;
     private int prioridad;
     private int tiempoDeEspera;
-
+    private Direccion direccion;
+    
+    public Vehiculo(TipoVehiculo tipo, String placa, String interseccionOrigen, String interseccionDestino,
+            int prioridad, int tiempoDeEspera, Direccion direccion) {
+        this.tipo = tipo;
+        this.placa = placa;
+        this.interseccionOrigen = interseccionOrigen;
+        this.interseccionDestino = interseccionDestino;
+        this.prioridad = prioridad;
+        this.tiempoDeEspera = tiempoDeEspera;
+        this.direccion = direccion;
+    }
+    
     public TipoVehiculo getTipo() {
         return tipo;
     }
@@ -58,4 +71,12 @@ public class Vehiculo {
         this.tiempoDeEspera = tiempoDeEspera;
     }
 
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+    
 }
