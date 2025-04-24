@@ -1,0 +1,23 @@
+					Por hacer:
+- tabla hash.
+- hacer pruebas de: arbol, tabla hash, listaEnlazada, matriz, colaDePrioridad y pila.
+- lectura de archivo de entrada.
+- simulacion de trafico.
+- reportes en tiempo real.
+- reportes de simulacion.
+
+
+
+
+			Calculo de complejidad de rutas
+- arbol de Interseccion
+- cada interseccion se guarda como un nodo en un arbol avl.
+- el valor del nodo representa el trafico o complejidad (vehiculos procesados, bloqueos).
+- se permite la busqueda, insercion y reorganizacion de rutas en O(log n).
+- el arbol se reequilibra para encontrar la ruta mas fluida
+
+			Prioridad de vehiculos
+1) tipo de vehiculo
+2) nivel de urgencia
+3) tiempo de espera
+4) direccion			

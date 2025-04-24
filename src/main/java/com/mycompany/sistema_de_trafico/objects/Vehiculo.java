@@ -23,6 +23,11 @@ public class Vehiculo {
         this.direccion = direccion;
     }
     
+    
+    public Vehiculo() {
+    }
+
+
     public TipoVehiculo getTipo() {
         return tipo;
     }

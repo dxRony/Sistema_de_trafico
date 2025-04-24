@@ -93,11 +93,3 @@ El sistema leera un archivo llamado trafico.csv con el formato:
 Ejemplo:
 	- AMBULANCIA,GUA-123A,A1,B3,5,3
 	- POLICIA,GUA-222B,A1,A2,4,5
-
-
-	Terminar cola de prioridad
-	Hacer tabla hash
-	Hacer el arbol
-
-
-	

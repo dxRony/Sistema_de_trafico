@@ -8,6 +8,7 @@ public class Node<T> {
     private Node<T> down;
     private Node<T> left;
     private Node<T> right;
+    private int height; // atributo exclusivo para el arbol avl
 
     public Node(T data) {
         this.data = data;
@@ -17,6 +18,7 @@ public class Node<T> {
         this.down = null;
         this.left = null;
         this.right = null;
+        this.height = 1;
     }
 
     public T getData() {
@@ -73,6 +75,14 @@ public class Node<T> {
 
     public void setRight(Node<T> right) {
         this.right = right;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
 }

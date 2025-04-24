@@ -24,7 +24,3 @@
 * TablaHash
 
 * Matriz3D
-
-Dudas:
--Para que usar matriz 3d, si con una matriz 2d bastaria?
--Como se define la complejidad de una interseccion?
