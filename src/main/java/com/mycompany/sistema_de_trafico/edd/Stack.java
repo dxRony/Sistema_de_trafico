@@ -27,7 +27,7 @@ public class Stack<T> {
         return data;
     }
 
-    public T getTop() {
+    public T peek() {
         if (isEmpty()) {
             System.out.println("La pila esta vacia");
             return null;
@@ -36,7 +36,23 @@ public class Stack<T> {
         return topData;
     }
 
-    private boolean isEmpty() {
+    public void imprimir() {
+        if (isEmpty()) {
+            System.out.println("La pila esta vacia");
+            return;
+        }
+
+        System.out.println("Mostrando pila");
+        Node<T> current = top;
+        while (current != null) {
+            System.out.println("  "+current.getData());
+            System.out.println("  |");            
+            current = current.getNext();
+        }
+        System.out.println("Fin de pila");
+    }
+
+    public boolean isEmpty() {
         return top == null;
     }
 

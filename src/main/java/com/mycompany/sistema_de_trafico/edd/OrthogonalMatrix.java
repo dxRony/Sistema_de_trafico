@@ -38,7 +38,7 @@ public class OrthogonalMatrix<T> {
 
     }
 
-    private Node<T> obtenerNodo(int x, int y) {
+    public Node<T> obtenerNodo(int x, int y) {
         if (x < 0 || y < 0 || x >= ancho || y >= alto) {
             return null;
         }

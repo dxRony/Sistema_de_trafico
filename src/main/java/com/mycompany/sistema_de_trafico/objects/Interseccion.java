@@ -6,7 +6,7 @@ public class Interseccion {
     int complejidad;
     String nombre;
     char representacion;
-    PriorityQueue colaPrioritaria;
+    PriorityQueue<Vehiculo> colaPrioritaria;
 
     public Interseccion(int complejidad, String nombre, char representacion) {
         this.complejidad = complejidad;
@@ -42,11 +42,11 @@ public class Interseccion {
         this.representacion = representacion;
     }
 
-    public PriorityQueue getColaPrioritaria() {
+    public PriorityQueue<Vehiculo> getColaPrioritaria() {
         return colaPrioritaria;
     }
 
-    public void setColaPrioritaria(PriorityQueue colaPrioritaria) {
+    public void setColaPrioritaria(PriorityQueue<Vehiculo> colaPrioritaria) {
         this.colaPrioritaria = colaPrioritaria;
     }
 

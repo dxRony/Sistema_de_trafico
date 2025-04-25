@@ -1,5 +1,7 @@
 package com.mycompany.sistema_de_trafico.edd;
 
+import com.mycompany.sistema_de_trafico.objects.Vehiculo;
+
 public class LinkedList<T> {
     private Node<T> head;
     private int size;
@@ -56,6 +58,30 @@ public class LinkedList<T> {
             current = current.getNext();
         }
         return false;
+    }
+
+    public void imprimir() {
+        Node<T> current = head;
+        while (current != null) {
+            System.out.print(current.getData() + " -> ");
+            current = current.getNext();
+        }
+        System.out.println("Fin de lista");
+    }
+
+    public Vehiculo buscarPorPlaca(String placa) {
+        Node<T> current = head;
+
+        while (current != null) {
+            if (current.getData() instanceof Vehiculo) {
+                Vehiculo vehiculo = (Vehiculo) current.getData();
+                if (vehiculo.getPlaca().equals(placa)) {
+                    return vehiculo;
+                }
+            }
+            current = current.getNext();
+        }
+        return null;
     }
 
     public boolean isEmpty() {

@@ -5,6 +5,12 @@ import com.mycompany.sistema_de_trafico.util.CalculadoraPrioridadVehiculo;
 
 public class PriorityQueue {
     private Node<Vehiculo> head;
+    private int size;
+
+    public PriorityQueue() {
+        this.head = null;
+        this.size = 0;
+    }
 
     public void insertar(Vehiculo vehiculo) {
         Node<Vehiculo> nuevo = new Node<>(vehiculo);
@@ -15,7 +21,6 @@ public class PriorityQueue {
                 head.setPrev(nuevo);
             }
             head = nuevo;
-
         } else {
             Node<Vehiculo> actual = head;
             while (actual.getNext() != null && CalculadoraPrioridadVehiculo.comparar(
@@ -30,6 +35,7 @@ public class PriorityQueue {
             actual.setNext(nuevo);
             nuevo.setPrev(actual);
         }
+        size++;
     }
 
     public Vehiculo desencolar() {
@@ -42,16 +48,44 @@ public class PriorityQueue {
         if (head != null) {
             head.setPrev(null);
         }
-
+        size--;
         return vehiculo;
     }
 
     public void imprimir() {
-        Node<Vehiculo> actual = head;
-        while (actual != null) {
-            System.out.print(actual.getData() + " -> ");
-            actual = actual.getNext();
+        if (estaVacia()) {
+            System.out.println("Cola de prioridad vacía");
+            return;
         }
-        System.out.println();
+
+        System.out.println("Mostrando cola de vehiculos:");
+
+        Node<Vehiculo> actual = head;
+        int posicion = 1;
+        while (actual != null) {
+            Vehiculo v = actual.getData();
+            System.out.println(posicion + ". " + v);
+            actual = actual.getNext();
+            posicion++;
+        }
+        System.out.println("======================================\n");
+
     }
+
+    public Vehiculo verPrimero() {
+        return head != null ? head.getData() : null;
+    }
+
+    public boolean estaVacia() {
+        return head == null;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
 }

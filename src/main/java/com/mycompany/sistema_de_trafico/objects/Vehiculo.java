@@ -83,5 +83,14 @@ public class Vehiculo {
     public void setDireccion(Direccion direccion) {
         this.direccion = direccion;
     }
+
+
+    @Override
+    public String toString() {
+        return "Vehiculo [tipo=" + tipo + ", placa=" + placa + ", interseccionOrigen=" + interseccionOrigen
+                + ", interseccionDestino=" + interseccionDestino + ", prioridad=" + prioridad + ", tiempoDeEspera="
+                + tiempoDeEspera + ", direccion=" + direccion + "]";
+    }
+    
     
 }

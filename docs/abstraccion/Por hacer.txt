@@ -1,6 +1,4 @@
 					Por hacer:
-- tabla hash.
-- hacer pruebas de: arbol, tabla hash, listaEnlazada, matriz, colaDePrioridad y pila.
 - lectura de archivo de entrada.
 - simulacion de trafico.
 - reportes en tiempo real.
@@ -21,3 +19,8 @@
 2) nivel de urgencia
 3) tiempo de espera
 4) direccion			
+
+
+quiero que me ayudes a implementar una tabla hash, utilizando mi clase nodo, que sea especial para almacenar vehiculos, la clave sera en base a un atributo llamado placa del objeto vehiculo que es de tipo string, un ejemplo de la placa seria: "GUA-222B" o "GUA-123A", entonces quiero ver si para el indice hagas como vi en un video, que se suman los valores ascii y luego se utiliza el modulo o tamaño de la tabla hash creo,
+y para cuando haya una colision de indice, quiero que utilices mi clase lista enlazada para gestionar las colisiones, la implementacion esa de los buckets.
+ademas quiero que el tamaño del hash map sea de un tamaño ingresado por el constructor del hashmap
