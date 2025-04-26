@@ -4,6 +4,8 @@
 
 package com.mycompany.sistema_de_trafico;
 
+import com.mycompany.sistema_de_trafico.flow.MotorDeSimulador;
+
 /**
  *
  * @author ronyrojas
@@ -12,5 +14,7 @@ public class Sistema_de_trafico {
 
     public static void main(String[] args) {
         System.out.println("Hello World!\nDesde EDD");
+        MotorDeSimulador simulador = new MotorDeSimulador();
+        simulador.mostrarMenu();
     }
 }

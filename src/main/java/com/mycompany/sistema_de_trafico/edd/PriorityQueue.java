@@ -72,10 +72,6 @@ public class PriorityQueue {
 
     }
 
-    public Vehiculo verPrimero() {
-        return head != null ? head.getData() : null;
-    }
-
     public boolean estaVacia() {
         return head == null;
     }

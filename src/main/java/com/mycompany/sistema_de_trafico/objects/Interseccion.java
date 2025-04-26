@@ -15,9 +15,10 @@ public class Interseccion {
     char representacionConsola;
     TipoInterseccion tipoInterseccion;
 
-    public Interseccion(int complejidad, String nombre, TipoInterseccion tipoInterseccion) {
-        this.complejidad = complejidad;
+    public Interseccion(String nombre, TipoInterseccion tipoInterseccion) {
+        this.complejidad = 0;
         this.nombre = nombre;
+        this.bloqueda = false;
         this.tipoInterseccion = tipoInterseccion;
 
         this.crearColasInterseccion();
@@ -29,7 +30,6 @@ public class Interseccion {
 
     private void crearColasInterseccion() {
         switch (this.tipoInterseccion) {
-
             case CRUCELVOLTEADAIZQUIERDA:
                 this.colaSur = new PriorityQueue<>();
                 this.colaEste = new PriorityQueue<>();
@@ -56,7 +56,7 @@ public class Interseccion {
                 this.representacionConsola = 'T';
                 break;
 
-            case CRUCETVOLTEADADRECHA:
+            case CRUCETVOLTEADADERECHA:
                 this.colaNorte = new PriorityQueue<>();
                 this.colaOeste = new PriorityQueue<>();
                 this.colaSur = new PriorityQueue<>();
@@ -89,11 +89,14 @@ public class Interseccion {
                 this.colaSur = new PriorityQueue<>();
                 this.representacionConsola = '+';
                 break;
-
             default:
                 System.out.println("Syntax error");
                 break;
         }
+    }
+
+    public void calcularComplejidad() {
+
     }
 
     public int getComplejidad() {

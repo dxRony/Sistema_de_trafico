@@ -1,34 +1,32 @@
 package com.mycompany.sistema_de_trafico.util;
 
-import com.mycompany.sistema_de_trafico.enums.Direccion;
 import com.mycompany.sistema_de_trafico.enums.TipoVehiculo;
 import com.mycompany.sistema_de_trafico.objects.Vehiculo;
 
 public class CalculadoraPrioridadVehiculo {
 
     public static int comparar(Vehiculo v1, Vehiculo v2) {
-        //comparando tipo de vehiculo
+        // comparando tipo de vehiculo
         int valorTipo1 = valorTipo(v1.getTipo());
-        int valorTipo2 = valorTipo(v2.getTipo());        
+        int valorTipo2 = valorTipo(v2.getTipo());
 
-        if (valorTipo1 != valorTipo2) {            
+        if (valorTipo1 != valorTipo2) {
             return valorTipo1 - valorTipo2;
         }
 
-        //comparando tipo de prioridad
+        // comparando tipo de prioridad
         if (v1.getPrioridad() != v2.getPrioridad()) {
             return v1.getPrioridad() - v2.getPrioridad();
         }
 
-        //comparando tiempo de espera
+        // comparando tiempo de espera
         if (v1.getTiempoDeEspera() != v2.getTiempoDeEspera()) {
             return v1.getTiempoDeEspera() - v2.getTiempoDeEspera();
         }
+        int tiempoDeEspera1 = v1.getTiempoDeEspera();
+        int tiempoDeEspera2 = v2.getTiempoDeEspera();
 
-        //comparando direccion
-        int valorDireccion1 = valorDireccion(v1.getDireccion());
-        int valorDireccion2 = valorDireccion(v2.getDireccion());        
-        return valorDireccion1 - valorDireccion2;
+        return tiempoDeEspera1 - tiempoDeEspera2;
     }
 
     private static int valorTipo(TipoVehiculo tipo) {
@@ -40,21 +38,6 @@ public class CalculadoraPrioridadVehiculo {
             case TRANSPORTE_PUBLICO:
                 return 2;
             case PARTICULAR:
-                return 1;
-            default:
-                return 0;
-        }
-    }
-
-    private static int valorDireccion(Direccion direccion) {
-        switch (direccion) {
-            case NORTE:
-                return 4;
-            case SUR:
-                return 3;
-            case ESTE:
-                return 2;
-            case OESTE:
                 return 1;
             default:
                 return 0;
