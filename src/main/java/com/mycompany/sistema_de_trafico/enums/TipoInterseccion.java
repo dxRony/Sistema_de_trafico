@@ -1,0 +1,14 @@
+package com.mycompany.sistema_de_trafico.enums;
+
+public enum TipoInterseccion {
+    SEMAFORO,
+    CRUCEMAS,
+    CRUCET,
+    CRUCETOPUESTA,
+    CRUCETVOLTEADADRECHA,
+    CRUCETVOLTEADAIZQUIERDA,
+    CRUCEL,
+    CRUCELOPUESTA,
+    CRUCELVOLTEADADERECHA,
+    CRUCELVOLTEADAIZQUIERDA    
+}
