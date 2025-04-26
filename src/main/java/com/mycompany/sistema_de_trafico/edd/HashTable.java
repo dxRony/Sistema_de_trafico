@@ -46,7 +46,7 @@ public class HashTable {
 
     public void imprimir() {
         for (int i = 0; i < tamaño; i++) {
-            System.out.print("indice " + i + ": ");
+            System.out.print("bucket " + i + ": ");
             tabla[i].imprimir();
         }
     }

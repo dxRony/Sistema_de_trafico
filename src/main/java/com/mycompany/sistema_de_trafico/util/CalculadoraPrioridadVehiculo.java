@@ -35,7 +35,7 @@ public class CalculadoraPrioridadVehiculo {
                 return 4;
             case POLICIA:
                 return 3;
-            case TRANSPORTE_PUBLICO:
+            case TRANSPORTE:
                 return 2;
             case PARTICULAR:
                 return 1;

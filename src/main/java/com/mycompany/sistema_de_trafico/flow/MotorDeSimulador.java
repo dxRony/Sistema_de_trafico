@@ -2,43 +2,63 @@ package com.mycompany.sistema_de_trafico.flow;
 
 import java.util.Scanner;
 
+import com.mycompany.sistema_de_trafico.edd.HashTable;
+import com.mycompany.sistema_de_trafico.edd.LinkedList;
+import com.mycompany.sistema_de_trafico.objects.Vehiculo;
+import com.mycompany.sistema_de_trafico.util.Archivo;
+
 public class MotorDeSimulador {
+    private boolean finalizarEjecucion = false;
 
     public void mostrarMenu() {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("   BIENVENIDO AL SIMULADOR DE TRAFICO   ");
-        System.out.println("*************Menu Principal*************");
-        System.out.println("Elije una opcion");
-        System.out.println("1. Empezar simulacion");
-        System.out.println("2. Ver reportes");
-        System.out.println("3. Salir");
+        while (!finalizarEjecucion) {
+            System.out.println("   BIENVENIDO AL SIMULADOR DE TRAFICO   ");
+            System.out.println("*************Menu Principal*************");
+            System.out.println("Elije una opcion");
+            System.out.println("1. Empezar simulacion");
+            System.out.println("2. Ver reportes");
+            System.out.println("3. Salir");
+            int opcionMenuPrincipal = scanner.nextInt();
 
-        int opcionMenuPrincipal = scanner.nextInt();
+            switch (opcionMenuPrincipal) {
+                case 1:
+                    this.empezarSimulacion();
+                    break;
 
-        switch (opcionMenuPrincipal) {
-            case 1:
-                this.empezarSimulacion();
-                break;
+                case 2:
+                    this.verReportes();
+                    break;
 
-            case 2:
-                this.verReportes();
-                break;
+                case 3:
+                    finalizarEjecucion = true;
+                    break;
 
-            case 3:
-
-                break;
-
-            default:
-                System.out.println("Opcion incorrecta");
-                break;
+                default:
+                    System.out.println("Opcion incorrecta");
+                    break;
+            }
         }
         scanner.close();
     }
 
     private void empezarSimulacion() {
+        Scanner scanner = new Scanner(System.in);
+        Archivo archivo = new Archivo();
 
+        System.out.println("Ingresa la ruta del archivo donde estan los vehiculos y su informacion...");
+        String rutaArchivo = scanner.nextLine();
+
+        HashTable tablaVehiculos = archivo.leerArchivo(rutaArchivo, 13);
+        System.out.println("Ingresa el ancho de tu ciudad");
+        int ancho = scanner.nextInt();
+        System.out.println("Ingresa el alto de tu ciudad");
+        int alto = scanner.nextInt();
+        System.out.println("Iniciando simulador...");
+        Simulador simulador = new Simulador(tablaVehiculos, ancho, alto);
+        simulador.iniciarSimulador();
     }
 
     private void verReportes() {
