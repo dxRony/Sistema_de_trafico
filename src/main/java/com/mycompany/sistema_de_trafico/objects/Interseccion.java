@@ -1,17 +1,17 @@
 package com.mycompany.sistema_de_trafico.objects;
 
+import com.mycompany.sistema_de_trafico.edd.PriorityQueue;
 import com.mycompany.sistema_de_trafico.enums.TipoInterseccion;
-import java.util.PriorityQueue;
 
 public class Interseccion {
 
     int complejidad;
     String nombre;
     boolean bloqueda;
-    PriorityQueue<Vehiculo> colaNorte;
-    PriorityQueue<Vehiculo> colaSur;
-    PriorityQueue<Vehiculo> colaEste;
-    PriorityQueue<Vehiculo> colaOeste;
+    PriorityQueue colaNorte;
+    PriorityQueue colaSur;
+    PriorityQueue colaEste;
+    PriorityQueue colaOeste;
     char representacionConsola;
     TipoInterseccion tipoInterseccion;
 
@@ -31,62 +31,62 @@ public class Interseccion {
     private void crearColasInterseccion() {
         switch (this.tipoInterseccion) {
             case CRUCELVOLTEADAIZQUIERDA:
-                this.colaSur = new PriorityQueue<>();
-                this.colaEste = new PriorityQueue<>();
+                this.colaSur = new PriorityQueue();
+                this.colaEste = new PriorityQueue();
                 this.representacionConsola = 'L';
                 break;
 
             case CRUCET:
-                this.colaOeste = new PriorityQueue<>();
-                this.colaSur = new PriorityQueue<>();
-                this.colaEste = new PriorityQueue<>();
+                this.colaOeste = new PriorityQueue();
+                this.colaSur = new PriorityQueue();
+                this.colaEste = new PriorityQueue();
                 this.representacionConsola = 'T';
                 break;
 
             case CRUCELOPUESTA:
-                this.colaOeste = new PriorityQueue<>();
-                this.colaSur = new PriorityQueue<>();
+                this.colaOeste = new PriorityQueue();
+                this.colaSur = new PriorityQueue();
                 this.representacionConsola = 'L';
                 break;
 
             case CRUCETVOLTEADAIZQUIERDA:
-                this.colaNorte = new PriorityQueue<>();
-                this.colaSur = new PriorityQueue<>();
-                this.colaEste = new PriorityQueue<>();
+                this.colaNorte = new PriorityQueue();
+                this.colaSur = new PriorityQueue();
+                this.colaEste = new PriorityQueue();
                 this.representacionConsola = 'T';
                 break;
 
             case CRUCETVOLTEADADERECHA:
-                this.colaNorte = new PriorityQueue<>();
-                this.colaOeste = new PriorityQueue<>();
-                this.colaSur = new PriorityQueue<>();
+                this.colaNorte = new PriorityQueue();
+                this.colaOeste = new PriorityQueue();
+                this.colaSur = new PriorityQueue();
                 this.representacionConsola = 'T';
                 break;
 
             case CRUCEL:
-                this.colaNorte = new PriorityQueue<>();
-                this.colaEste = new PriorityQueue<>();
+                this.colaNorte = new PriorityQueue();
+                this.colaEste = new PriorityQueue();
                 this.representacionConsola = 'L';
                 break;
 
             case CRUCETOPUESTA:
-                this.colaOeste = new PriorityQueue<>();
-                this.colaEste = new PriorityQueue<>();
-                this.colaNorte = new PriorityQueue<>();
+                this.colaOeste = new PriorityQueue();
+                this.colaEste = new PriorityQueue();
+                this.colaNorte = new PriorityQueue();
                 this.representacionConsola = 'T';
                 break;
 
             case CRUCELVOLTEADADERECHA:
-                this.colaOeste = new PriorityQueue<>();
-                this.colaNorte = new PriorityQueue<>();
+                this.colaOeste = new PriorityQueue();
+                this.colaNorte = new PriorityQueue();
                 this.representacionConsola = 'L';
                 break;
 
             case CRUCEMAS:
-                this.colaEste = new PriorityQueue<>();
-                this.colaOeste = new PriorityQueue<>();
-                this.colaNorte = new PriorityQueue<>();
-                this.colaSur = new PriorityQueue<>();
+                this.colaEste = new PriorityQueue();
+                this.colaOeste = new PriorityQueue();
+                this.colaNorte = new PriorityQueue();
+                this.colaSur = new PriorityQueue();
                 this.representacionConsola = '+';
                 break;
             default:
@@ -137,6 +137,22 @@ public class Interseccion {
 
     public void setTipoInterseccion(TipoInterseccion tipoInterseccion) {
         this.tipoInterseccion = tipoInterseccion;
+    }
+
+    public PriorityQueue getColaNorte() {
+        return colaNorte;
+    }
+
+    public PriorityQueue getColaSur() {
+        return colaSur;
+    }
+
+    public PriorityQueue getColaEste() {
+        return colaEste;
+    }
+
+    public PriorityQueue getColaOeste() {
+        return colaOeste;
     }
 
 }

@@ -2,7 +2,8 @@ package com.mycompany.sistema_de_trafico.flow;
 
 import java.util.Scanner;
 
-import com.mycompany.sistema_de_trafico.edd.HashTable;
+import com.mycompany.sistema_de_trafico.edd.LinkedList;
+import com.mycompany.sistema_de_trafico.objects.Vehiculo;
 import com.mycompany.sistema_de_trafico.util.Archivo;
 
 public class MotorDeSimulador {
@@ -49,13 +50,15 @@ public class MotorDeSimulador {
         System.out.println("Ingresa la ruta del archivo donde estan los vehiculos y su informacion...");
         String rutaArchivo = scanner.nextLine();
 
-        HashTable tablaVehiculos = archivo.leerArchivo(rutaArchivo, 13);
-        System.out.println("Ingresa el ancho de tu ciudad");
+        LinkedList<Vehiculo> listaVehiculos = archivo.leerArchivo(rutaArchivo);
+        System.out.print("Ingresa el ancho de tu ciudad: ");
         int ancho = scanner.nextInt();
-        System.out.println("Ingresa el alto de tu ciudad");
+        System.out.print("Ingresa el alto de tu ciudad: ");
         int alto = scanner.nextInt();
-        System.out.println("Iniciando simulador...");
-        Simulador simulador = new Simulador(tablaVehiculos, ancho, alto);
+        System.out.print("Ingresa el tamaño de la tabla Hash: ");
+        int tamañoTablaHash = scanner.nextInt();
+        System.out.println("\nIniciando simulador...");
+        Simulador simulador = new Simulador(listaVehiculos, ancho, alto, tamañoTablaHash);
         simulador.iniciarSimulador();
     }
 

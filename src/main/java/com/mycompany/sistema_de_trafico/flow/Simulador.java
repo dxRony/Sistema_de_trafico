@@ -2,10 +2,14 @@ package com.mycompany.sistema_de_trafico.flow;
 
 import com.mycompany.sistema_de_trafico.edd.AVLTree;
 import com.mycompany.sistema_de_trafico.edd.HashTable;
+import com.mycompany.sistema_de_trafico.edd.LinkedList;
+import com.mycompany.sistema_de_trafico.edd.Node;
 import com.mycompany.sistema_de_trafico.edd.OrthogonalMatrix;
+import com.mycompany.sistema_de_trafico.edd.PriorityQueue;
 import com.mycompany.sistema_de_trafico.edd.Stack;
 import com.mycompany.sistema_de_trafico.enums.TipoInterseccion;
 import com.mycompany.sistema_de_trafico.objects.Interseccion;
+import com.mycompany.sistema_de_trafico.objects.Vehiculo;
 
 public class Simulador {
 
@@ -20,16 +24,21 @@ public class Simulador {
     // tabla donde se almacenan los vehiculos
     private HashTable tablaVehiculos;
 
-    public Simulador(HashTable tablaVehiculos, int ancho, int alto) {
-        this.columnas = ancho;
-        this.filas = alto;
-        this.tablaVehiculos = tablaVehiculos;
-        ciudad = new OrthogonalMatrix<>(ancho, alto);
+    public Simulador(LinkedList<Vehiculo> vehiculosCargados, int anchoCiudad, int altoCiudad, int tamañoTablaHash) {
+        this.columnas = anchoCiudad;
+        this.filas = altoCiudad;
+        tablaVehiculos = new HashTable(tamañoTablaHash);
+        ciudad = new OrthogonalMatrix<>(anchoCiudad, altoCiudad);
         arbolIntersecciones = new AVLTree();
         registroEventos = new Stack<>();
 
         generarMapaCiudad();
+        System.out.println("Mostrando el mapa de la ciudad:");
         ciudad.imprimir();
+
+        System.out.println("Repartiendo a los vehiculos en la ciudad...");
+        repartirVehiculosCiudad(vehiculosCargados);
+
     }
 
     public void iniciarSimulador() {
@@ -87,4 +96,75 @@ public class Simulador {
         }
     }
 
+    private void repartirVehiculosCiudad(LinkedList<Vehiculo> listaVehiculos) {
+        if (listaVehiculos == null || listaVehiculos.getSize() == 0) {
+            System.out.println("No hay vehiculos para repartir");
+            return;
+        }
+        int vehiculosRepartidos = 0;
+        int vehiculosPerdidos = 0;
+
+        while (!listaVehiculos.isEmpty()) {
+            Node<Vehiculo> nodoVehiculo = listaVehiculos.getHead();
+            Vehiculo vehiculo = nodoVehiculo.getData();
+
+            Interseccion interseccionOrigen = obtenerInterseccion(vehiculo.getInterseccionOrigen());
+            Interseccion interseccionDestino = obtenerInterseccion(vehiculo.getInterseccionDestino());
+
+            if (interseccionOrigen != null && interseccionDestino != null) {
+                PriorityQueue cola = obtenerCola(interseccionOrigen);
+
+                if (cola != null) {
+                    cola.insertar(vehiculo);
+                    vehiculosRepartidos++;
+                    tablaVehiculos.insertar(vehiculo);
+                }
+
+            } else {
+                System.out.println("Vehiculo con placa: " + vehiculo.getPlaca() +
+                        ", tiene un origen o destino inexistente");
+                vehiculosPerdidos++;
+            }
+            listaVehiculos.remove(vehiculo);
+        }
+        System.out.println("Se repartieron: " + vehiculosRepartidos + ".\nSe perdieron: " + vehiculosPerdidos);
+    }
+
+    private Interseccion obtenerInterseccion(String nombreInterseccion) {
+        if (nombreInterseccion == null) {
+            return null;
+        }
+
+        char letraDeFila = nombreInterseccion.charAt(0);
+        int numeroDeFila = letraDeFila - 'A';
+
+        int numeroDeColumna = Integer.parseInt(nombreInterseccion.substring(1)) - 1;
+
+        if (numeroDeFila >= 0 && numeroDeFila < filas && numeroDeColumna >= 0 && numeroDeColumna < columnas) {
+            Node<Interseccion> nodoInterseccion = ciudad.obtenerNodo(numeroDeFila, numeroDeColumna);
+            if (nodoInterseccion != null) {
+                return nodoInterseccion.getData();
+            } else {
+                return null;
+            }
+        } else {
+            // excediendo limites del tablero -> nodo inexistente
+            return null;
+        }
+
+    }
+
+    private PriorityQueue obtenerCola(Interseccion interseccion) {
+
+        if (interseccion.getColaNorte() != null) {
+            return interseccion.getColaNorte();
+        } else if (interseccion.getColaSur() != null) {
+            return interseccion.getColaSur();
+        } else if (interseccion.getColaEste() != null) {
+            return interseccion.getColaEste();
+        } else if (interseccion.getColaOeste() != null) {
+            return interseccion.getColaOeste();
+        }
+        return null;
+    }
 }

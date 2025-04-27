@@ -96,4 +96,12 @@ public class LinkedList<T> {
         this.size = size;
     }
 
+    public Node<T> getHead() {
+        return head;
+    }
+
+    public void setHead(Node<T> head) {
+        this.head = head;
+    }
+
 }

@@ -69,7 +69,7 @@ public class OrthogonalMatrix<T> {
     }
 
     public void imprimir() {
-        System.out.println("Mapa de la ciudad:");
+        System.out.println("\nMapa de la ciudad:");
         System.out.println("******************************");
         System.out.print("   ");
         for (int x = 0; x < ancho; x++) {
@@ -87,7 +87,7 @@ public class OrthogonalMatrix<T> {
             }
             System.out.println();
         }
-        System.out.println("******************************");
+        System.out.println("******************************\n");
     }
 
 }
