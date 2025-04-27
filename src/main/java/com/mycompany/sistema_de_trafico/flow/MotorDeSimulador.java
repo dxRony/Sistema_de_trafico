@@ -3,8 +3,6 @@ package com.mycompany.sistema_de_trafico.flow;
 import java.util.Scanner;
 
 import com.mycompany.sistema_de_trafico.edd.HashTable;
-import com.mycompany.sistema_de_trafico.edd.LinkedList;
-import com.mycompany.sistema_de_trafico.objects.Vehiculo;
 import com.mycompany.sistema_de_trafico.util.Archivo;
 
 public class MotorDeSimulador {

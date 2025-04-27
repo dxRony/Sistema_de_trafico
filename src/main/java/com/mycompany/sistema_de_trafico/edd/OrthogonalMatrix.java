@@ -1,10 +1,14 @@
 package com.mycompany.sistema_de_trafico.edd;
 
+import com.mycompany.sistema_de_trafico.objects.Interseccion;
+
 public class OrthogonalMatrix<T> {
 
     private Node<T> head;
     private int ancho;
     private int alto;
+    private char[] letrasFilas = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+            'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };;
 
     public OrthogonalMatrix(int ancho, int alto) {
         this.ancho = ancho;
@@ -64,12 +68,21 @@ public class OrthogonalMatrix<T> {
         }
     }
 
-    public void imprimir(){
+    public void imprimir() {
+        System.out.println("Mapa de la ciudad:");
         System.out.println("******************************");
-        for (int y = alto-1; y >= 0; y--) {
+        System.out.print("   ");
+        for (int x = 0; x < ancho; x++) {
+            System.out.print(" " + (x + 1) + " ");
+        }
+        System.out.println();
+        for (int y = 0; y < alto; y++) {
+            System.out.print(letrasFilas[y] + "  ");
+
             Node<T> fila = obtenerNodo(0, y);
             for (int x = 0; x < ancho && fila != null; x++) {
-                System.out.print(fila.getData()+ " ");
+                Interseccion interseccion = (Interseccion) fila.getData();
+                System.out.print(" " + interseccion.getRepresentacionConsola() + " ");
                 fila = fila.getRight();
             }
             System.out.println();

@@ -1,5 +1,8 @@
 					Por hacer:
 - simulacion de trafico.
+	* repartir vehiculos aleatoriamente a traves de cada interseccion
+	* mover a los vehiculos a su destino
+	* 
 - reportes en tiempo real.
 - reportes de simulacion.
 
