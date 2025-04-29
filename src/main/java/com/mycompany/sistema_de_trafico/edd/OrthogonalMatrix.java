@@ -68,6 +68,16 @@ public class OrthogonalMatrix<T> {
         }
     }
 
+    public T obtenerDato(int x, int y) {
+        Node<T> nodo = obtenerNodo(x, y);
+        if (nodo != null) {
+            T dato = nodo.getData();
+            return dato;
+        } else {
+            throw new IndexOutOfBoundsException("Posicion invalida");
+        }
+    }
+
     public void imprimir() {
         System.out.println("\nMapa de la ciudad:");
         System.out.println("******************************");

@@ -63,31 +63,31 @@ public class AVLTree {
         int balance = getFactorBalance(nodo);
 
         if (balance > 1) {
-            //en este caso, el arbol izquierdo esta desbalanceado
+            // en este caso, el arbol izquierdo esta desbalanceado
             if (getFactorBalance(nodo.getLeft()) < 0) {
-                //si el subarbol izquierdo tiene un factor < 0, es un caso LR
+                // si el subarbol izquierdo tiene un factor < 0, es un caso LR
                 nodo.setLeft(rotacionIzquierda(nodo.getLeft()));
             }
-            //si solo es necesaria una rotacion a la derecha, es un caso LL
+            // si solo es necesaria una rotacion a la derecha, es un caso LL
             return rotacionDerecha(nodo);
         }
 
         if (balance < -1) {
-            //en este caso, el arbol derecho esta desbalanceado
+            // en este caso, el arbol derecho esta desbalanceado
             if (getFactorBalance(nodo.getRight()) > 0) {
-                //si el subarbol derecho tiene un factor > 0, es un caso RL
+                // si el subarbol derecho tiene un factor > 0, es un caso RL
                 nodo.setRight(rotacionDerecha(nodo.getRight()));
             }
-            //si solo es necesaria una rotacion a la izquierda, es un caso RR
+            // si solo es necesaria una rotacion a la izquierda, es un caso RR
             return rotacionIzquierda(nodo);
         }
-        //si no hay algun tipo de balanceo se retorna el nodo
+        // si no hay algun tipo de balanceo se retorna el nodo
         return nodo;
     }
 
     private int getFactorBalance(Node<Interseccion> nodo) {
-        //metodo para obtener el factor de balance
-        //si es -1, 0 o 1, el arbol esta balanceado
+        // metodo para obtener el factor de balance
+        // si es -1, 0 o 1, el arbol esta balanceado
         if (nodo == null) {
             return 0;
         }
@@ -95,40 +95,40 @@ public class AVLTree {
     }
 
     private Node<Interseccion> rotacionDerecha(Node<Interseccion> y) {
-        //guardando subarbol izquierdo del nodo recibido
+        // guardando subarbol izquierdo del nodo recibido
         Node<Interseccion> x = y.getLeft();
-        //guardando subarbol derecho de x
+        // guardando subarbol derecho de x
         Node<Interseccion> T2 = x.getRight();
 
-        //para x su nuevo subarbol derecho sera su antiguo padre
+        // para x su nuevo subarbol derecho sera su antiguo padre
         x.setRight(y);
-        //para y su nuevo subarbol izquierod sera el subarbol derecho de x
+        // para y su nuevo subarbol izquierod sera el subarbol derecho de x
         y.setLeft(T2);
 
-        //actualizando altura de ambos nodos
+        // actualizando altura de ambos nodos
         actualizarAltura(y);
         actualizarAltura(x);
 
-        //retornando la nueva raiz
+        // retornando la nueva raiz
         return x;
     }
 
     private Node<Interseccion> rotacionIzquierda(Node<Interseccion> x) {
-        //guardando subarbol derecho del nodo recibido
+        // guardando subarbol derecho del nodo recibido
         Node<Interseccion> y = x.getRight();
-        //guardando subarbol izquierdo de y
+        // guardando subarbol izquierdo de y
         Node<Interseccion> T2 = y.getLeft();
 
-        //para y su nuevo izquierdo sera su antiguo padre        
+        // para y su nuevo izquierdo sera su antiguo padre
         y.setLeft(x);
-        //para el antiguo padre su subarbol derecho sera el subarbol izquierdo de y
+        // para el antiguo padre su subarbol derecho sera el subarbol izquierdo de y
         x.setRight(T2);
 
-        //actualizando altura de ambos
+        // actualizando altura de ambos
         actualizarAltura(x);
         actualizarAltura(y);
 
-        //retornando nueva raiz
+        // retornando nueva raiz
         return y;
     }
 
@@ -140,7 +140,7 @@ public class AVLTree {
         if (nodo == null) {
             return;
         }
-        int sangria = 5;        
+        int sangria = 5;
         espacio += sangria;
 
         imprimirDescendente(nodo.getRight(), espacio);
@@ -149,8 +149,18 @@ public class AVLTree {
             System.out.print(" ");
         }
 
-        System.out.println(nodo.getData().toString());
+        Interseccion interseccion = nodo.getData();
+        System.out.println(interseccion.getComplejidad());
+        // System.out.println(nodo.getData().toString());
         imprimirDescendente(nodo.getLeft(), espacio);
+    }
+
+    public Node<Interseccion> getRoot() {
+        return root;
+    }
+
+    public void setRoot(Node<Interseccion> root) {
+        this.root = root;
     }
 
 }

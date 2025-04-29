@@ -26,7 +26,8 @@ public class Simulador {
     // tabla donde se almacenan los vehiculos
     private HashTable tablaVehiculos;
     private boolean simulacionTerminada;
-    private char[] letrasFilas;
+    private char[] letrasFilas = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+            'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };;
 
     private Scanner sn;
 
@@ -46,6 +47,7 @@ public class Simulador {
         generarMapaCiudad();
         System.out.println("Repartiendo a los vehiculos en la ciudad...");
         repartirVehiculosCiudad(vehiculosCargados);
+        calcularComplejidades();
 
     }
 
@@ -62,9 +64,6 @@ public class Simulador {
             System.out.println("El numero de filas no debe ser mayor a 26");
             return;
         }
-
-        char[] letrasFilas = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
         for (int y = 0; y < filas; y++) {
             char letraDeFila = letrasFilas[y];
@@ -130,7 +129,6 @@ public class Simulador {
                     cola.insertar(vehiculo);
                     vehiculosRepartidos++;
                     tablaVehiculos.insertar(vehiculo);
-                    interseccionOrigen.calcularComplejidad();                    
                 }
 
             } else {
@@ -147,10 +145,6 @@ public class Simulador {
         if (nombreInterseccion == null) {
             return null;
         }
-
-        char[] letrasFilas = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-
         char letraDeFila = Character.toUpperCase(nombreInterseccion.charAt(0));
 
         int numeroDeFila = -1;
@@ -187,12 +181,19 @@ public class Simulador {
             return interseccion.getColaNorte();
         } else if (interseccion.getColaSur() != null) {
             return interseccion.getColaSur();
-        } else if (interseccion.getColaEste() != null) {
-            return interseccion.getColaEste();
-        } else if (interseccion.getColaOeste() != null) {
-            return interseccion.getColaOeste();
         }
         return null;
+    }
+
+    private void calcularComplejidades() {
+        for (int y = 0; y < filas; y++) {
+            for (int x = 0; x < columnas; x++) {
+                Interseccion interseccion = ciudad.obtenerDato(x, y);
+                interseccion.calcularComplejidad();
+                arbolIntersecciones.insertar(interseccion);
+                System.out.println("Complejidad: " + interseccion.getComplejidad());
+            }
+        }
     }
 
     private int mostrarAcciones() {
@@ -243,6 +244,11 @@ public class Simulador {
     }
 
     private void moverTrafico() {
+        Interseccion interseccion = (Interseccion) arbolIntersecciones.getRoot().getData();
+        System.out.println("raiz del arbol:" + interseccion.getComplejidad());
+
+        System.out.println("arbol:");
+        arbolIntersecciones.imprimir();
     }
 
     private void verEstadoInterseccion() {
@@ -275,7 +281,6 @@ public class Simulador {
                 interseccionBuscada.getColaOeste().imprimir();
             }
         }
-
     }
 
     private void generarBloqueo() {

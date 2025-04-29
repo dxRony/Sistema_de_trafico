@@ -9,6 +9,7 @@ public class HashTable {
     private int tamaño;
 
     // constructor que recibe el tamaño del arreglo
+    @SuppressWarnings("unchecked")
     public HashTable(int tamaño) {
 
         this.tamaño = tamaño;

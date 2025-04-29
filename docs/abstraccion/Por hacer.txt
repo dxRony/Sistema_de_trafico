@@ -1,7 +1,7 @@
 					Por hacer:
 - simulacion de trafico.
-    * insertar y verificar arbol
 	* mover a los vehiculos a su destino
+    
 - reportes en tiempo real.
 - reportes de simulacion.
 
