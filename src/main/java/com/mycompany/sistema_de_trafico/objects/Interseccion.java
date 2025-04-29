@@ -1,5 +1,6 @@
 package com.mycompany.sistema_de_trafico.objects;
 
+import com.mycompany.sistema_de_trafico.edd.Node;
 import com.mycompany.sistema_de_trafico.edd.PriorityQueue;
 import com.mycompany.sistema_de_trafico.enums.TipoInterseccion;
 
@@ -96,7 +97,50 @@ public class Interseccion {
     }
 
     public void calcularComplejidad() {
+        // limpiando valor antes de calcular complejidad
+        this.complejidad = 0;
+        if (this.colaNorte != null) {
+            calcularComplejidadCola(colaNorte);
+        }
+        if (this.colaSur != null) {
+            calcularComplejidadCola(colaSur);
+        }
+        if (this.colaEste != null) {
+            calcularComplejidadCola(colaEste);
+        }
+        if (this.colaOeste != null) {
+            calcularComplejidadCola(colaOeste);
+        }
+    }
 
+    public void calcularComplejidadCola(PriorityQueue colaActual) {
+        Node<Vehiculo> nodoActual = colaActual.getHead();
+
+        while (nodoActual != null) {
+            // visitando vehiculo - calculando complejidad de vehiculo - avanzando a
+            // siguiente
+            Vehiculo vehiculoActual = nodoActual.getData();
+            // agregando complejidad por el tipo
+            switch (vehiculoActual.getTipo()) {
+                case AMBULANCIA:
+                    complejidad += 15;
+                    break;
+                case POLICIA:
+                    complejidad += 10;
+                    break;
+                case TRANSPORTE:
+                    complejidad += 7;
+                    break;
+                case PARTICULAR:
+                    complejidad += 4;
+                    break;
+            }
+            // agregando complejidad por el tiempo de espera
+            complejidad += vehiculoActual.getTiempoDeEspera() * 2;
+            // agregnado complejidad por la prioridad
+            complejidad += vehiculoActual.getPrioridad() * 2;
+            nodoActual = nodoActual.getNext();
+        }
     }
 
     public int getComplejidad() {

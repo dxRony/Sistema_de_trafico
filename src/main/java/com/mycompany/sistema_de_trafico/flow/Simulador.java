@@ -1,5 +1,7 @@
 package com.mycompany.sistema_de_trafico.flow;
 
+import java.util.Scanner;
+
 import com.mycompany.sistema_de_trafico.edd.AVLTree;
 import com.mycompany.sistema_de_trafico.edd.HashTable;
 import com.mycompany.sistema_de_trafico.edd.LinkedList;
@@ -23,26 +25,36 @@ public class Simulador {
     private Stack<String> registroEventos;
     // tabla donde se almacenan los vehiculos
     private HashTable tablaVehiculos;
+    private boolean simulacionTerminada;
+    private char[] letrasFilas;
+
+    private Scanner sn;
 
     public Simulador(LinkedList<Vehiculo> vehiculosCargados, int anchoCiudad, int altoCiudad, int tamañoTablaHash) {
         this.columnas = anchoCiudad;
         this.filas = altoCiudad;
+        simulacionTerminada = false;
+
+        sn = new Scanner(System.in);
+
         tablaVehiculos = new HashTable(tamañoTablaHash);
         ciudad = new OrthogonalMatrix<>(anchoCiudad, altoCiudad);
         arbolIntersecciones = new AVLTree();
         registroEventos = new Stack<>();
 
+        System.out.println("Generando el mapa de la ciudad:");
         generarMapaCiudad();
-        System.out.println("Mostrando el mapa de la ciudad:");
-        ciudad.imprimir();
-
         System.out.println("Repartiendo a los vehiculos en la ciudad...");
         repartirVehiculosCiudad(vehiculosCargados);
 
     }
 
     public void iniciarSimulador() {
-
+        System.out.println("En simulador, todo bien a este punto");
+        while (!simulacionTerminada) {
+            ciudad.imprimir();
+            realizarAccion(mostrarAcciones());
+        }
     }
 
     private void generarMapaCiudad() {
@@ -118,6 +130,7 @@ public class Simulador {
                     cola.insertar(vehiculo);
                     vehiculosRepartidos++;
                     tablaVehiculos.insertar(vehiculo);
+                    interseccionOrigen.calcularComplejidad();                    
                 }
 
             } else {
@@ -135,13 +148,28 @@ public class Simulador {
             return null;
         }
 
-        char letraDeFila = nombreInterseccion.charAt(0);
-        int numeroDeFila = letraDeFila - 'A';
+        char[] letrasFilas = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
+        char letraDeFila = Character.toUpperCase(nombreInterseccion.charAt(0));
+
+        int numeroDeFila = -1;
+
+        for (int i = 0; i < letrasFilas.length; i++) {
+            if (letrasFilas[i] == letraDeFila) {
+                numeroDeFila = i;
+                break;
+            }
+        }
+
+        if (numeroDeFila == -1) {
+            // letra no encontrada
+            return null;
+        }
         int numeroDeColumna = Integer.parseInt(nombreInterseccion.substring(1)) - 1;
 
         if (numeroDeFila >= 0 && numeroDeFila < filas && numeroDeColumna >= 0 && numeroDeColumna < columnas) {
-            Node<Interseccion> nodoInterseccion = ciudad.obtenerNodo(numeroDeFila, numeroDeColumna);
+            Node<Interseccion> nodoInterseccion = ciudad.obtenerNodo(numeroDeColumna, numeroDeFila);
             if (nodoInterseccion != null) {
                 return nodoInterseccion.getData();
             } else {
@@ -151,7 +179,6 @@ public class Simulador {
             // excediendo limites del tablero -> nodo inexistente
             return null;
         }
-
     }
 
     private PriorityQueue obtenerCola(Interseccion interseccion) {
@@ -166,5 +193,97 @@ public class Simulador {
             return interseccion.getColaOeste();
         }
         return null;
+    }
+
+    private int mostrarAcciones() {
+        int opcion;
+
+        System.out.println("\n*********** Selecciona Una Opcion ***********");
+        System.out.println("1. Mover trafico.");
+        System.out.println("2. Ver estado de una interseccion.");
+        System.out.println("3. Generar bloqueo.");
+        System.out.println("4. Agregar vehiculo manualmente.");
+        System.out.println("5. Ver vehiculo existente.");
+        System.out.println("6. Terminar simulacion.");
+        opcion = sn.nextInt();
+        return opcion;
+    }
+
+    private void realizarAccion(int opcion) {
+        switch (opcion) {
+            case 1:
+                System.out.println("Iniciando movimiento de trafico.");
+                moverTrafico();
+                break;
+
+            case 2:
+                System.out.println("Viendo estado de interseccion.");
+                verEstadoInterseccion();
+                break;
+            case 3:
+                System.out.println("Generando bloqueo.");
+                generarBloqueo();
+                break;
+            case 4:
+                System.out.println("Agregando vehiculo manualmente.");
+                agregarVehiculo();
+                break;
+            case 5:
+                System.out.println("Mostrando vehiculo.");
+                verVehiculo();
+                break;
+            case 6:
+                System.out.println("Abandonando simulacion.");
+                simulacionTerminada = true;
+                break;
+            default:
+                System.out.println("Syntax error.");
+                break;
+        }
+    }
+
+    private void moverTrafico() {
+    }
+
+    private void verEstadoInterseccion() {
+        sn.nextLine();
+        System.out.println("Ingresa el nombre de la interseccion que deseas ver (A1, B3, C2, etc).");
+        String nombreInterseccion = sn.nextLine();
+
+        Interseccion interseccionBuscada = obtenerInterseccion(nombreInterseccion);
+
+        if (interseccionBuscada != null) {
+            System.out.println("\n****Estado de la interseccion****");
+            System.out.println("Nombre: " + interseccionBuscada.getNombre());
+            System.out.println("Complejidad: " + interseccionBuscada.getComplejidad());
+            System.out.println("Hay bloqueo?: " + interseccionBuscada.isBloqueda());
+            System.out.println("Representacion en consola: " + interseccionBuscada.getRepresentacionConsola());
+            if (interseccionBuscada.getColaNorte() != null) {
+                System.out.println("Cola norte:");
+                interseccionBuscada.getColaNorte().imprimir();
+            }
+            if (interseccionBuscada.getColaSur() != null) {
+                System.out.println("Cola sur:");
+                interseccionBuscada.getColaSur().imprimir();
+            }
+            if (interseccionBuscada.getColaEste() != null) {
+                System.out.println("Cola este:");
+                interseccionBuscada.getColaEste().imprimir();
+            }
+            if (interseccionBuscada.getColaOeste() != null) {
+                System.out.println("Cola oeste:");
+                interseccionBuscada.getColaOeste().imprimir();
+            }
+        }
+
+    }
+
+    private void generarBloqueo() {
+    }
+
+    private void agregarVehiculo() {
+    }
+
+    private void verVehiculo() {
     }
 }

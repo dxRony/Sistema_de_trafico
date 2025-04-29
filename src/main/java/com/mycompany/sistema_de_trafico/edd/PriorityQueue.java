@@ -54,7 +54,7 @@ public class PriorityQueue {
 
     public void imprimir() {
         if (estaVacia()) {
-            System.out.println("Cola de prioridad vacía");
+            System.out.println("Cola de prioridad vacía\n");
             return;
         }
 
@@ -83,5 +83,15 @@ public class PriorityQueue {
     public void setSize(int size) {
         this.size = size;
     }
+
+    public Node<Vehiculo> getHead() {
+        return head;
+    }
+
+    public void setHead(Node<Vehiculo> head) {
+        this.head = head;
+    }
+
+    
 
 }

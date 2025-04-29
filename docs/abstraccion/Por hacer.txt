@@ -1,6 +1,6 @@
 					Por hacer:
 - simulacion de trafico.
-	* calcularComplejidad de cada interseccion	
+    * insertar y verificar arbol
 	* mover a los vehiculos a su destino
 - reportes en tiempo real.
 - reportes de simulacion.
