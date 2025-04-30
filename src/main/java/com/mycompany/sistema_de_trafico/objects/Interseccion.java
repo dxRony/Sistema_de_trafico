@@ -1,7 +1,8 @@
 package com.mycompany.sistema_de_trafico.objects;
 
 import com.mycompany.sistema_de_trafico.edd.Node;
-import com.mycompany.sistema_de_trafico.edd.PriorityQueue;
+import com.mycompany.sistema_de_trafico.edd.PriorityQueueV;
+import com.mycompany.sistema_de_trafico.enums.Direccion;
 import com.mycompany.sistema_de_trafico.enums.TipoInterseccion;
 
 public class Interseccion {
@@ -9,10 +10,10 @@ public class Interseccion {
     int complejidad;
     String nombre;
     boolean bloqueda;
-    PriorityQueue colaNorte;
-    PriorityQueue colaSur;
-    PriorityQueue colaEste;
-    PriorityQueue colaOeste;
+    PriorityQueueV colaNorte;
+    PriorityQueueV colaSur;
+    PriorityQueueV colaEste;
+    PriorityQueueV colaOeste;
     char representacionConsola;
     TipoInterseccion tipoInterseccion;
 
@@ -32,62 +33,62 @@ public class Interseccion {
     private void crearColasInterseccion() {
         switch (this.tipoInterseccion) {
             case CRUCELVOLTEADAIZQUIERDA:
-                this.colaSur = new PriorityQueue();
-                this.colaEste = new PriorityQueue();
+                this.colaSur = new PriorityQueueV();
+                this.colaEste = new PriorityQueueV();
                 this.representacionConsola = 'L';
                 break;
 
             case CRUCET:
-                this.colaOeste = new PriorityQueue();
-                this.colaSur = new PriorityQueue();
-                this.colaEste = new PriorityQueue();
+                this.colaOeste = new PriorityQueueV();
+                this.colaSur = new PriorityQueueV();
+                this.colaEste = new PriorityQueueV();
                 this.representacionConsola = 'T';
                 break;
 
             case CRUCELOPUESTA:
-                this.colaOeste = new PriorityQueue();
-                this.colaSur = new PriorityQueue();
+                this.colaOeste = new PriorityQueueV();
+                this.colaSur = new PriorityQueueV();
                 this.representacionConsola = 'L';
                 break;
 
             case CRUCETVOLTEADAIZQUIERDA:
-                this.colaNorte = new PriorityQueue();
-                this.colaSur = new PriorityQueue();
-                this.colaEste = new PriorityQueue();
+                this.colaNorte = new PriorityQueueV();
+                this.colaSur = new PriorityQueueV();
+                this.colaEste = new PriorityQueueV();
                 this.representacionConsola = 'T';
                 break;
 
             case CRUCETVOLTEADADERECHA:
-                this.colaNorte = new PriorityQueue();
-                this.colaOeste = new PriorityQueue();
-                this.colaSur = new PriorityQueue();
+                this.colaNorte = new PriorityQueueV();
+                this.colaOeste = new PriorityQueueV();
+                this.colaSur = new PriorityQueueV();
                 this.representacionConsola = 'T';
                 break;
 
             case CRUCEL:
-                this.colaNorte = new PriorityQueue();
-                this.colaEste = new PriorityQueue();
+                this.colaNorte = new PriorityQueueV();
+                this.colaEste = new PriorityQueueV();
                 this.representacionConsola = 'L';
                 break;
 
             case CRUCETOPUESTA:
-                this.colaOeste = new PriorityQueue();
-                this.colaEste = new PriorityQueue();
-                this.colaNorte = new PriorityQueue();
+                this.colaOeste = new PriorityQueueV();
+                this.colaEste = new PriorityQueueV();
+                this.colaNorte = new PriorityQueueV();
                 this.representacionConsola = 'T';
                 break;
 
             case CRUCELVOLTEADADERECHA:
-                this.colaOeste = new PriorityQueue();
-                this.colaNorte = new PriorityQueue();
+                this.colaOeste = new PriorityQueueV();
+                this.colaNorte = new PriorityQueueV();
                 this.representacionConsola = 'L';
                 break;
 
             case CRUCEMAS:
-                this.colaEste = new PriorityQueue();
-                this.colaOeste = new PriorityQueue();
-                this.colaNorte = new PriorityQueue();
-                this.colaSur = new PriorityQueue();
+                this.colaEste = new PriorityQueueV();
+                this.colaOeste = new PriorityQueueV();
+                this.colaNorte = new PriorityQueueV();
+                this.colaSur = new PriorityQueueV();
                 this.representacionConsola = '+';
                 break;
             default:
@@ -113,7 +114,7 @@ public class Interseccion {
         }
     }
 
-    public void calcularComplejidadCola(PriorityQueue colaActual) {
+    private void calcularComplejidadCola(PriorityQueueV colaActual) {
         Node<Vehiculo> nodoActual = colaActual.getHead();
 
         while (nodoActual != null) {
@@ -140,6 +141,24 @@ public class Interseccion {
             // agregnado complejidad por la prioridad
             complejidad += vehiculoActual.getPrioridad() * 2;
             nodoActual = nodoActual.getNext();
+        }
+    }
+
+    public PriorityQueueV getColaPorDireccion(Direccion direccion) {
+        switch (direccion) {
+            case NORTE:
+                return colaNorte;
+
+            case SUR:
+                return colaSur;
+
+            case ESTE:
+                return colaEste;
+
+            case OESTE:
+                return colaOeste;
+            default:
+                return null;
         }
     }
 
@@ -183,19 +202,19 @@ public class Interseccion {
         this.tipoInterseccion = tipoInterseccion;
     }
 
-    public PriorityQueue getColaNorte() {
+    public PriorityQueueV getColaNorte() {
         return colaNorte;
     }
 
-    public PriorityQueue getColaSur() {
+    public PriorityQueueV getColaSur() {
         return colaSur;
     }
 
-    public PriorityQueue getColaEste() {
+    public PriorityQueueV getColaEste() {
         return colaEste;
     }
 
-    public PriorityQueue getColaOeste() {
+    public PriorityQueueV getColaOeste() {
         return colaOeste;
     }
 

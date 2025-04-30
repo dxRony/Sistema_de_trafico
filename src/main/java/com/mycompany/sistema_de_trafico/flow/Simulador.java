@@ -2,13 +2,14 @@ package com.mycompany.sistema_de_trafico.flow;
 
 import java.util.Scanner;
 
-import com.mycompany.sistema_de_trafico.edd.AVLTree;
 import com.mycompany.sistema_de_trafico.edd.HashTable;
 import com.mycompany.sistema_de_trafico.edd.LinkedList;
 import com.mycompany.sistema_de_trafico.edd.Node;
 import com.mycompany.sistema_de_trafico.edd.OrthogonalMatrix;
-import com.mycompany.sistema_de_trafico.edd.PriorityQueue;
+import com.mycompany.sistema_de_trafico.edd.PriorityQueueI;
+import com.mycompany.sistema_de_trafico.edd.PriorityQueueV;
 import com.mycompany.sistema_de_trafico.edd.Stack;
+import com.mycompany.sistema_de_trafico.enums.Direccion;
 import com.mycompany.sistema_de_trafico.enums.TipoInterseccion;
 import com.mycompany.sistema_de_trafico.objects.Interseccion;
 import com.mycompany.sistema_de_trafico.objects.Vehiculo;
@@ -20,7 +21,7 @@ public class Simulador {
     // tablero de la ciudad
     private OrthogonalMatrix<Interseccion> ciudad;
     // arbol para buscar la ruta mas compleja
-    private AVLTree arbolIntersecciones;
+    private PriorityQueueI arbolIntersecciones;
     // pila donde se guardaran los eventos
     private Stack<String> registroEventos;
     // tabla donde se almacenan los vehiculos
@@ -40,7 +41,7 @@ public class Simulador {
 
         tablaVehiculos = new HashTable(tamañoTablaHash);
         ciudad = new OrthogonalMatrix<>(anchoCiudad, altoCiudad);
-        arbolIntersecciones = new AVLTree();
+        arbolIntersecciones = new PriorityQueueI();
         registroEventos = new Stack<>();
 
         System.out.println("Generando el mapa de la ciudad:");
@@ -123,7 +124,7 @@ public class Simulador {
             Interseccion interseccionDestino = obtenerInterseccion(vehiculo.getInterseccionDestino());
 
             if (interseccionOrigen != null && interseccionDestino != null) {
-                PriorityQueue cola = obtenerCola(interseccionOrigen);
+                PriorityQueueV cola = obtenerCola(interseccionOrigen);
 
                 if (cola != null) {
                     cola.insertar(vehiculo);
@@ -145,22 +146,9 @@ public class Simulador {
         if (nombreInterseccion == null) {
             return null;
         }
-        char letraDeFila = Character.toUpperCase(nombreInterseccion.charAt(0));
 
-        int numeroDeFila = -1;
-
-        for (int i = 0; i < letrasFilas.length; i++) {
-            if (letrasFilas[i] == letraDeFila) {
-                numeroDeFila = i;
-                break;
-            }
-        }
-
-        if (numeroDeFila == -1) {
-            // letra no encontrada
-            return null;
-        }
-        int numeroDeColumna = Integer.parseInt(nombreInterseccion.substring(1)) - 1;
+        int numeroDeFila = obtenerNumeroDeFila(nombreInterseccion);
+        int numeroDeColumna = obtenerNumeroColumna(nombreInterseccion);
 
         if (numeroDeFila >= 0 && numeroDeFila < filas && numeroDeColumna >= 0 && numeroDeColumna < columnas) {
             Node<Interseccion> nodoInterseccion = ciudad.obtenerNodo(numeroDeColumna, numeroDeFila);
@@ -175,12 +163,16 @@ public class Simulador {
         }
     }
 
-    private PriorityQueue obtenerCola(Interseccion interseccion) {
+    private PriorityQueueV obtenerCola(Interseccion interseccion) {
 
         if (interseccion.getColaNorte() != null) {
             return interseccion.getColaNorte();
         } else if (interseccion.getColaSur() != null) {
             return interseccion.getColaSur();
+        } else if (interseccion.getColaEste() != null) {
+            return interseccion.getColaEste();
+        } else if (interseccion.getColaOeste() != null) {
+            return interseccion.getColaOeste();
         }
         return null;
     }
@@ -244,11 +236,154 @@ public class Simulador {
     }
 
     private void moverTrafico() {
-        Interseccion interseccion = (Interseccion) arbolIntersecciones.getRoot().getData();
-        System.out.println("raiz del arbol:" + interseccion.getComplejidad());
+        // obteniendo interseccion de mayor prioridad (se elimina de la cola)
+        Interseccion interseccionPrioritaria = arbolIntersecciones.desencolar();
+        String nombreInterseccionSalida = interseccionPrioritaria.getNombre();
+        // obteniendo numero de fila y columna de la interseccion a trabajar
+        int filaActual = obtenerNumeroDeFila(nombreInterseccionSalida);
+        int columnaActual = obtenerNumeroColumna(nombreInterseccionSalida);
 
-        System.out.println("arbol:");
-        arbolIntersecciones.imprimir();
+        // verificando que no haya bloqueo
+        if (interseccionPrioritaria.isBloqueda()) {
+            System.out.println("En la interseccion: " + nombreInterseccionSalida
+                    + ", no se puede mover el trafico porque hay un bloqueo.");
+            System.out.println("Se necesita liberar el bloqueo para continuar...");
+            registroEventos.push("Movimiento de trafico rechazado por bloqueo en interseccion: "
+                    + nombreInterseccionSalida);
+            return;
+        }
+        // iterando a cada direccion posible de la interseccion
+        for (Direccion direccion : Direccion.values()) {
+            // obteniendo cola en la direccion actual
+            PriorityQueueV colaActual = interseccionPrioritaria.getColaPorDireccion(direccion);
+            // si no hay cola en la direccion actual, se salta la iteracion
+            if (colaActual == null)
+                continue;
+
+            // cola temporal para evitar enciclar en caso de bloqueo
+            PriorityQueueV colaTemporal = new PriorityQueueV();
+
+            for (int i = 0; i < colaActual.getSize(); i++) {
+                // recorriendo cola vehiculo a vehiculo
+                Vehiculo vehiculoActual = colaActual.desencolar();
+                String nombreInterseccionDestino = vehiculoActual.getInterseccionDestino();
+                // obteniendo numero de fila y columna de destino
+                int filaDestino = obtenerNumeroDeFila(nombreInterseccionDestino);
+                int columnaDestino = obtenerNumeroColumna(nombreInterseccionDestino);
+                // calculando distancia de la posicion actual al destino del vehiculo
+                int distanciaX = columnaDestino - columnaActual;
+                int distanciaY = filaDestino - filaActual;
+                // dada la distancia se define la direccion del movimiento
+                Direccion direccionMovimiento = null;
+                // si la distancia en x!=0, el vehiculo se desplaza horizontalmente
+                if (distanciaX != 0) {
+                    if (distanciaX > 0) {
+                        direccionMovimiento = Direccion.ESTE;
+                    } else {
+                        direccionMovimiento = Direccion.OESTE;
+                    }
+                    // si la distancia en x=0 y en y!=0, el vehiculo se desplaza verticalmente
+                } else if (distanciaY != 0) {
+                    if (distanciaY > 0) {
+                        direccionMovimiento = Direccion.SUR;
+                    } else {
+                        direccionMovimiento = Direccion.NORTE;
+                    }
+                }
+                // actualizando coordenada dependiendo del movimiento
+                if (direccionMovimiento != null) {
+                    int nuevaFila = filaActual;
+                    int nuevaColumna = columnaActual;
+
+                    switch (direccionMovimiento) {
+                        case NORTE:
+                            nuevaFila--;
+                            break;
+                        case SUR:
+                            nuevaFila++;
+                            break;
+                        case ESTE:
+                            nuevaColumna++;
+                            break;
+                        case OESTE:
+                            nuevaColumna--;
+                            break;
+                    }
+
+                    // obteniendo interseccion donde se ira el vehiculo
+                    Interseccion interseccionMovimiento = ciudad.obtenerDato(nuevaFila, nuevaColumna);
+                    // verificando datos de interseccion
+                    if (interseccionMovimiento != null && !interseccionMovimiento.isBloqueda()) {
+                        int distanciaRestanteX = columnaDestino - nuevaColumna;
+                        int distanciaRestanteY = filaDestino - nuevaFila;
+
+                        // verificando el proximo movimiento, para insertar el vehiculo en la cola con
+                        // esa direccion
+                        Direccion proximaDireccion = null;
+                        if (distanciaRestanteX != 0) {
+                            if (distanciaRestanteX > 0) {
+                                proximaDireccion = Direccion.ESTE;
+                            } else {
+                                proximaDireccion = Direccion.OESTE;
+                            }
+
+                        } else if (distanciaRestanteY != 0) {
+                            if (distanciaRestanteY > 0) {
+                                proximaDireccion = Direccion.SUR;
+                            } else {
+                                proximaDireccion = Direccion.NORTE;
+                            }
+                        }
+                        if (proximaDireccion != null) {
+                            // insertando el vehiculo en la cola de la direccion del proximo movimiento
+                            interseccionMovimiento.getColaPorDireccion(proximaDireccion).insertar(vehiculoActual);
+                        } else {
+                            registroEventos
+                                    .push("Vehiculo " + vehiculoActual.getPlaca() + " ya llego a su destino: "
+                                            + vehiculoActual.getInterseccionDestino());
+                        }
+
+                        // registrando movimiento
+                        registroEventos.push("Vehiculo " + vehiculoActual.getPlaca() + " se movio de " +
+                                interseccionPrioritaria.getNombre() + ", a " + interseccionMovimiento.getNombre());
+                        interseccionMovimiento.calcularComplejidad();
+                    } else {
+                        // No pudo moverse, se guarda en la cola temporal
+                        colaTemporal.insertar(vehiculoActual);
+                    }
+                } else {
+                    // cuando ya no hay direccion de movimiento el vehiculo ya llego a su destino
+                    registroEventos.push("Vehiculo " + vehiculoActual.getPlaca() + " ya llego a su destino: "
+                            + vehiculoActual.getInterseccionDestino());
+                }
+            }
+            //llenando cola actual con la temporal con los vehiculos que no se pudieron mover
+            while (!colaTemporal.estaVacia()) {
+                colaActual.insertar(colaTemporal.desencolar());
+            }
+        }
+        // actualizando complejidad y volviendo a encolar la interseccion
+        interseccionPrioritaria.calcularComplejidad();
+        arbolIntersecciones.insertar(interseccionPrioritaria);
+    }
+
+    private int obtenerNumeroDeFila(String nombreInterseccion) {
+        char letraDeFila = Character.toUpperCase(nombreInterseccion.charAt(0));
+        int numeroDeFila = -1;
+
+        for (int i = 0; i < letrasFilas.length; i++) {
+            if (letrasFilas[i] == letraDeFila) {
+                numeroDeFila = i;
+                break;
+            }
+        }
+
+        return numeroDeFila;
+    }
+
+    private int obtenerNumeroColumna(String nombreInterseccion) {
+        int numeroDeColumna = Integer.parseInt(nombreInterseccion.substring(1)) - 1;
+        return numeroDeColumna;
     }
 
     private void verEstadoInterseccion() {

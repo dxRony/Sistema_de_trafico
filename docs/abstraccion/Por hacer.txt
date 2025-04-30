@@ -21,17 +21,3 @@
 3) tiempo de espera
 
 /home/ronyrojas/Escritorio/vehiculos.csv
-
-
-System.out.println("******************************");
-        for (int y = alto - 1; y >= 0; y--) {
-            Node<T> fila = obtenerNodo(0, y);
-
-            for (int x = 0; x < ancho && fila != null; x++) {
-                Interseccion interseccion = (Interseccion) fila.getData();
-                System.out.print(interseccion.getRepresentacionConsola() + " ");
-                fila = fila.getRight();
-            }
-            System.out.println();
-        }
-        System.out.println("******************************");

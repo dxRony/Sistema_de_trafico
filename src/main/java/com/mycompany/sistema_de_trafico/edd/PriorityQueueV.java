@@ -3,11 +3,11 @@ package com.mycompany.sistema_de_trafico.edd;
 import com.mycompany.sistema_de_trafico.objects.Vehiculo;
 import com.mycompany.sistema_de_trafico.util.CalculadoraPrioridadVehiculo;
 
-public class PriorityQueue {
+public class PriorityQueueV {
     private Node<Vehiculo> head;
     private int size;
 
-    public PriorityQueue() {
+    public PriorityQueueV() {
         this.head = null;
         this.size = 0;
     }
@@ -91,7 +91,5 @@ public class PriorityQueue {
     public void setHead(Node<Vehiculo> head) {
         this.head = head;
     }
-
-    
 
 }
