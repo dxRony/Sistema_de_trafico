@@ -13,7 +13,6 @@ import com.mycompany.sistema_de_trafico.flow.MotorDeSimulador;
 public class Sistema_de_trafico {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!\nDesde EDD");
         MotorDeSimulador simulador = new MotorDeSimulador();
         simulador.mostrarMenu();
     }

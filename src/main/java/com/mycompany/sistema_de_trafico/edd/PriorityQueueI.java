@@ -55,11 +55,6 @@ public class PriorityQueueI {
         return interseccion;
     }
 
-    public void actualizarInterseccion(Interseccion interseccion) {
-        eliminar(interseccion);
-        insertar(interseccion);
-    }
-
     public boolean eliminar(Interseccion interseccion) {
         Node<Interseccion> actual = head;
 
@@ -83,19 +78,52 @@ public class PriorityQueueI {
         return false;
     }
 
+    public void actualizarInterseccion(String nombre) {
+        if (head == null)
+            return;
+
+        Node<Interseccion> actual = head;
+
+        while (actual != null) {
+            if (actual.getData().getNombre().equals(nombre)) {
+                // Encontramos la intersección, ahora la quitamos de la cola
+                Interseccion interseccion = actual.getData();
+
+                // Desenlazar el nodo actual
+                if (actual.getPrev() != null) {
+                    actual.getPrev().setNext(actual.getNext());
+                } else {
+                    head = actual.getNext(); // era la cabeza
+                }
+
+                if (actual.getNext() != null) {
+                    actual.getNext().setPrev(actual.getPrev());
+                }
+
+                size--;
+
+                // Calcular nueva complejidad
+                interseccion.calcularComplejidad();
+
+                // Reinsertar en la cola
+                insertar(interseccion);
+                return;
+            }
+            actual = actual.getNext();
+        }
+    }
+
     public void imprimir() {
         if (estaVacia()) {
             System.out.println("Cola de prioridad vacia\n");
             return;
         }
 
-        System.out.println("Mostrando cola de intersecciones por prioridad:");
-
         Node<Interseccion> actual = head;
         int posicion = 1;
         while (actual != null) {
             Interseccion i = actual.getData();
-            System.out.println(posicion + ". " + i.getNombre() + " - Complejidad: " + i.getComplejidad());
+            System.out.println(posicion + ") " + i.getNombre() + " - complejidad: " + i.getComplejidad());
             actual = actual.getNext();
             posicion++;
         }

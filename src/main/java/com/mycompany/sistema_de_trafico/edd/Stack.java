@@ -42,14 +42,14 @@ public class Stack<T> {
             return;
         }
 
-        System.out.println("Mostrando pila");
+        System.out.println("\nMostrando pila");
         Node<T> current = top;
         while (current != null) {
             System.out.println("  "+current.getData());
             System.out.println("  |");            
             current = current.getNext();
         }
-        System.out.println("Fin de pila");
+        System.out.println("Fin de pila\n");
     }
 
     public boolean isEmpty() {

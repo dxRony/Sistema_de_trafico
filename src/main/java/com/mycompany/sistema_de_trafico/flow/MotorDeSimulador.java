@@ -57,7 +57,7 @@ public class MotorDeSimulador {
         int alto = scanner.nextInt();
         System.out.print("Ingresa el tamaño de la tabla Hash: ");
         int tamañoTablaHash = scanner.nextInt();
-        System.out.println("\nIniciando simulador...");
+        System.out.println("\nINICIANDO SIMULADOR");
         Simulador simulador = new Simulador(listaVehiculos, ancho, alto, tamañoTablaHash);
         simulador.iniciarSimulador();
     }
