@@ -1,22 +1,21 @@
-					Por hacer:
-- 
-    
-- reportes en tiempo de ejecucion.
-- reportes de simulacion.
 
+		en simulacion:
+- colocar prioridad atendida en consola.
+- agregar atributo bool enDestino para los vehiculos.
+- listar todos los vehiculos que esta en destino en las opciones de la simulacion.
+- listar todos los vehiculos que no estan en destino en las opciones de la simulacion
+- actualizar tiempo cada vez que se opero un vehiculo, se haya movido o no.
+- agregar atributo a interseccion vehiculosCirculados, para llevar el control las veces
+  que un vehiculo paso por la interseccion.
+- ingresar manualmente un vehiculo.
 
+		en reportes:
+- modificar la lista para que muestre los ultimos 20 eventos.
+- generacion y ordenamiento de reportes.
 
+		en docs:
+- documentacion tecnica.
+- manual de usuario.
 
-			Calculo de complejidad de rutas
-- arbol de Interseccion
-- cada interseccion se guarda como un nodo en un arbol avl.
-- el valor del nodo representa el trafico o complejidad (vehiculos procesados, bloqueos).
-- se permite la busqueda, insercion y reorganizacion de rutas en O(log n).
-- el arbol se reequilibra para encontrar la ruta mas fluida
-
-			Prioridad de vehiculos
-1) tipo de vehiculo
-2) nivel de urgencia
-3) tiempo de espera
 
 /home/ronyrojas/Escritorio/vehiculos.csv
