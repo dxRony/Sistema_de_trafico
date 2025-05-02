@@ -130,6 +130,21 @@ public class PriorityQueueI {
         System.out.println("======================================\n");
     }
 
+    public void mostrarVehiculosCirculados() {
+
+        Node<Interseccion> actual = head;
+        int posicion = 1;
+        while (actual != null) {
+            Interseccion i = actual.getData();
+            System.out.println(
+                    posicion + ") " + " En la interseccion: " + i.getNombre() + ", circularon: "
+                            + i.getVehiculosCirculados() + ", vehiculos.");
+            actual = actual.getNext();
+            posicion++;
+        }
+        System.out.println("======================================\n");
+    }
+
     public boolean estaVacia() {
         return head == null;
     }

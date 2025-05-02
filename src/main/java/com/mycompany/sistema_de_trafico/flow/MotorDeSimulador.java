@@ -68,6 +68,7 @@ public class MotorDeSimulador {
         reporte.setRegistroUltimosEventos(simulador.getRegistroEventos());
         reporte.setListaVehiculos(simulador.getListaGeneralVehiculos());
         reporte.setVehiculosDuplicados(simulador.getListaDuplicados());
+        reporte.setIntersecciones(simulador.getArbolIntersecciones());
     }
 
     private void verReportes() {

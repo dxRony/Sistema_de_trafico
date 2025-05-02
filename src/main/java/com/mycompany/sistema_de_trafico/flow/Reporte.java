@@ -3,7 +3,10 @@ package com.mycompany.sistema_de_trafico.flow;
 import java.util.Scanner;
 
 import com.mycompany.sistema_de_trafico.edd.LinkedList;
+import com.mycompany.sistema_de_trafico.edd.Node;
+import com.mycompany.sistema_de_trafico.edd.PriorityQueueI;
 import com.mycompany.sistema_de_trafico.edd.Stack;
+import com.mycompany.sistema_de_trafico.enums.TipoVehiculo;
 import com.mycompany.sistema_de_trafico.objects.Vehiculo;
 import com.mycompany.sistema_de_trafico.util.InsercionDirecta;
 import com.mycompany.sistema_de_trafico.util.MetodoDeLaSacudida;
@@ -15,6 +18,7 @@ public class Reporte {
     private Stack<String> registroUltimosEventos;
     private InsercionDirecta insercionDirecta;
     private MetodoDeLaSacudida metodoDeLaSacudida;
+    private PriorityQueueI intersecciones;
 
     public Reporte() {
         listaVehiculos = new LinkedList<>();
@@ -22,6 +26,7 @@ public class Reporte {
         registroUltimosEventos = new Stack<>();
         insercionDirecta = new InsercionDirecta();
         metodoDeLaSacudida = new MetodoDeLaSacudida();
+        intersecciones = new PriorityQueueI();
     }
 
     public void mostrarOpcionesReportes() {
@@ -104,12 +109,47 @@ public class Reporte {
 
     private void verVehiculosCirculadosPorInterseccion() {
         System.out.println("Mostrando vehiculos circulados por interseccion...");
-        
+        intersecciones.mostrarVehiculosCirculados();
     }
 
     private void verTiempoPromedioPorTipoDeVehiculo() {
-        System.out.println("Mostrando tiempo promedio por tipo de vehiculo...");
+        int ambulancias = 0, tiempoAmbulancias = 0, promedioAmbulancias = 0;
+        int policias = 0, tiempoPolicias = 0, promedioPolicias = 0;
+        int transportes = 0, tiempoTransportes = 0, promedioTransportes = 0;
+        int particulares = 0, tiempoParticulares = 0, promedioParticulares = 0;
 
+        Node<Vehiculo> actual = listaVehiculos.getHead();
+        while (actual != null) {
+            TipoVehiculo tipo = actual.getData().getTipo();
+            switch (tipo) {
+                case AMBULANCIA:
+                    ambulancias++;
+                    tiempoAmbulancias += actual.getData().getTiempoDeEspera();
+                    break;
+                case POLICIA:
+                    policias++;
+                    tiempoPolicias += actual.getData().getTiempoDeEspera();
+                    break;
+                case TRANSPORTE:
+                    transportes++;
+                    tiempoTransportes += actual.getData().getTiempoDeEspera();
+                    break;
+                case PARTICULAR:
+                    particulares++;
+                    tiempoParticulares += actual.getData().getTiempoDeEspera();
+                    break;
+            }
+            actual = actual.getNext();
+        }
+        promedioAmbulancias = tiempoAmbulancias / ambulancias;
+        promedioPolicias = tiempoPolicias / policias;
+        promedioTransportes = tiempoTransportes / transportes;
+        promedioParticulares = tiempoParticulares / particulares;
+
+        System.out.println("\nPromedio de tiempo de espera para AMBULANCIAS: " + promedioAmbulancias + " mins");
+        System.out.println("Promedio de tiempo de espera para POLICIAS: " + promedioPolicias + " mins");
+        System.out.println("Promedio de tiempo de espera para TRANSPORTES: " + promedioTransportes + " mins ");
+        System.out.println("Promedio de tiempo de espera para PARTICULARES: " + promedioParticulares + " mins\n");
     }
 
     private void verListaVehiculosDuplicados() {
@@ -146,4 +186,11 @@ public class Reporte {
         this.registroUltimosEventos = registroUltimosEventos;
     }
 
+    public PriorityQueueI getIntersecciones() {
+        return intersecciones;
+    }
+
+    public void setIntersecciones(PriorityQueueI intersecciones) {
+        this.intersecciones = intersecciones;
+    }
 }

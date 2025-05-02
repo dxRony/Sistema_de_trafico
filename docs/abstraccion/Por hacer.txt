@@ -2,10 +2,6 @@
 
 		en reportes:
 
-- Mostrar reportes de: 
-	* Cantidad total de vehiculos que cruzaron por cada carril.
-	* Tiempo promedio de espera por tipo de vehiculo.
-
 		en docs:
 - documentacion tecnica.
 - manual de usuario.
