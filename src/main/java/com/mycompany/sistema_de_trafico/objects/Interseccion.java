@@ -228,4 +228,12 @@ public class Interseccion {
         this.vehiculosCirculados = vehiculosCirculados;
     }
 
+    @Override
+    public String toString() {
+        return "Interseccion [complejidad=" + complejidad + ", nombre=" + nombre + ", bloqueda=" + bloqueda
+                + ", representacionConsola=" + representacionConsola + ", vehiculosCirculados=" + vehiculosCirculados
+                + "]";
+    }
+
+    
 }

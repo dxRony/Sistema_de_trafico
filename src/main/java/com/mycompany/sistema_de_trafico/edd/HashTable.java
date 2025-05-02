@@ -31,11 +31,25 @@ public class HashTable {
         return sumaAscii % tamaño;
     }
 
-    public void insertar(Vehiculo vehiculo) {
+    public boolean insertar(Vehiculo vehiculo) {
+        if (placaDuplicada(vehiculo.getPlaca())) {
+            System.out.println("\nError, el vehiculo con la placa: " + vehiculo.getPlaca() + ", ya existe.");
+            return false;
+        }
         // obteniendo el indice del vehiculo
         int indice = funcionHash(vehiculo.getPlaca());
         // agregando al vehiculo a la tabla con el indice que devolvio la funcion hash
         tabla[indice].add(vehiculo);
+        return true;
+    }
+
+    private boolean placaDuplicada(String placa) {
+        int indice = funcionHash(placa);
+        boolean existe = false;
+        if (tabla[indice].buscarPorPlaca(placa) != null) {
+            existe = true;
+        }
+        return existe;
     }
 
     public Vehiculo buscar(String placa) {

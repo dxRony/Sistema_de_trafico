@@ -27,6 +27,11 @@ public class Simulador {
     private Stack<String> registroEventos;
     // tabla donde se almacenan los vehiculos
     private HashTable tablaVehiculos;
+    // lista donde se guardan los vehiculos con placa duplicada
+    private LinkedList<Vehiculo> listaDuplicados;
+    // lista donde se guardan todos los vehiculos
+    private LinkedList<Vehiculo> listaGeneralVehiculos;
+
     private boolean simulacionTerminada;
     private char[] letrasFilas = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
             'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
@@ -43,6 +48,8 @@ public class Simulador {
         ciudad = new OrthogonalMatrix<>(anchoCiudad, altoCiudad);
         arbolIntersecciones = new PriorityQueueI();
         registroEventos = new Stack<>();
+        listaDuplicados = new LinkedList<>();
+        listaGeneralVehiculos = new LinkedList<>();
 
         System.out.println("Generando el mapa de la ciudad...");
         generarMapaCiudad();
@@ -126,11 +133,17 @@ public class Simulador {
                 PriorityQueueV cola = obtenerCola(interseccionOrigen);
 
                 if (cola != null) {
-                    cola.insertar(vehiculo);
-                    vehiculosRepartidos++;
-                    vehiculo.setInterseccionActual(interseccionOrigen.getNombre());
-                    tablaVehiculos.insertar(vehiculo);
-                    interseccionOrigen.setVehiculosCirculados(interseccionOrigen.getVehiculosCirculados() + 1);
+                    boolean insertado = tablaVehiculos.insertar(vehiculo);
+                    if (!insertado) {
+                        listaDuplicados.add(vehiculo);
+                    } else {
+                        cola.insertar(vehiculo);
+                        listaGeneralVehiculos.add(vehiculo);
+                        vehiculosRepartidos++;
+                        vehiculo.setInterseccionActual(interseccionOrigen.getNombre());
+                        interseccionOrigen.setVehiculosCirculados(interseccionOrigen.getVehiculosCirculados() + 1);
+                    }
+
                 }
 
             } else {
@@ -194,13 +207,14 @@ public class Simulador {
         System.out.println("\n*********** Selecciona Una Opcion ***********");
         System.out.println("1. Mover trafico.");
         System.out.println("2. Ver estado de una interseccion.");
-        System.out.println("3. Generar bloqueo.");
-        System.out.println("4. Agregar vehiculo manualmente.");
-        System.out.println("5. Ver vehiculo existente.");
-        System.out.println("6. Ver vehiculos en destino y no en destino.");
-        System.out.println("7. Mostrar ultimos eventos.");
-        System.out.println("8. Mostrar complejidades de intersecciones.");
-        System.out.println("9. Terminar simulacion.");
+        System.out.println("3. Ver interseccion mas congestionada.");
+        System.out.println("4. Generar bloqueo.");
+        System.out.println("5. Agregar vehiculo manualmente.");
+        System.out.println("6. Ver vehiculo existente.");
+        System.out.println("7. Ver vehiculos en destino y no en destino.");
+        System.out.println("8. Mostrar ultimos eventos.");
+        System.out.println("9. Mostrar complejidades de intersecciones.");
+        System.out.println("10. Terminar simulacion.");
         opcion = sn.nextInt();
         return opcion;
     }
@@ -211,36 +225,39 @@ public class Simulador {
                 System.out.println("\nIniciando movimiento de trafico...");
                 moverTrafico();
                 break;
-
             case 2:
                 System.out.println("\nViendo estado de interseccion...");
                 verEstadoInterseccion();
                 break;
             case 3:
+                System.out.println("\nMostrando interseccion mas congestionada...");
+                verInterseccionMasCongestionada();
+                break;
+            case 4:
                 System.out.println("\nGenerando bloqueo...");
                 generarBloqueo();
                 break;
-            case 4:
+            case 5:
                 System.out.println("\nAgregando vehiculo manualmente...");
                 agregarVehiculo();
                 break;
-            case 5:
+            case 6:
                 System.out.println("\nMostrando vehiculo...");
                 verVehiculo();
                 break;
-            case 6:
+            case 7:
                 System.out.println("\nMostrando vehiculos...");
                 mostrarVehiculosEnDestino();
                 break;
-            case 7:
+            case 8:
                 System.out.println("\nMostrando ultimos 20 eventos...");
                 mostrarUltimosEventos();
                 break;
-            case 8:
+            case 9:
                 System.out.println("\nMostrando complejidades de intersecciones...");
                 mostrarComplejidades();
                 break;
-            case 9:
+            case 10:
                 System.out.println("\nAbandonando simulacion...");
                 simulacionTerminada = true;
                 break;
@@ -468,6 +485,10 @@ public class Simulador {
         }
     }
 
+    private void verInterseccionMasCongestionada() {
+        System.out.println(arbolIntersecciones.getHead().getData().toString());
+    }
+
     private void generarBloqueo() {
         Scanner sn = new Scanner(System.in);
         System.out.print("Ingresa el nombre de la interseccion donde quieres generar el bloqueo: ");
@@ -485,7 +506,7 @@ public class Simulador {
     private void agregarVehiculo() {
         Scanner sn = new Scanner(System.in);
         System.out.println("Ingresa los datos del vehiculo manualmente!!!");
-        System.out.print("Ingresa el tipo: ");
+        System.out.print("Ingresa el tipo de vehiculo: ");
         String tipo = sn.next();
         TipoVehiculo tipoVehiculo = TipoVehiculo.valueOf(tipo);
         System.out.print("Ingresa la placa del vehiculo: ");
@@ -510,13 +531,20 @@ public class Simulador {
         if (interseccionOrigen != null && interseccionDestino != null) {
             PriorityQueueV cola = obtenerCola(interseccionOrigen);
             if (cola != null) {
-                cola.insertar(vehiculo);
-                tablaVehiculos.insertar(vehiculo);
-                interseccionOrigen.setVehiculosCirculados(interseccionOrigen.getVehiculosCirculados() + 1);
-                vehiculo.setInterseccionActual(interseccionOrigen.getNombre());
-                String mensaje = "Agregando vehiculo: " + vehiculo.toString();
-                System.out.println(mensaje);
-                registroEventos.push(mensaje);
+
+                boolean insertado = tablaVehiculos.insertar(vehiculo);
+                if (!insertado) {
+                    listaDuplicados.add(vehiculo);
+                } else {
+                    cola.insertar(vehiculo);
+                    interseccionOrigen.setVehiculosCirculados(interseccionOrigen.getVehiculosCirculados() + 1);
+                    vehiculo.setInterseccionActual(interseccionOrigen.getNombre());
+                    String mensaje = "Agregando vehiculo: " + vehiculo.toString();
+                    System.out.println(mensaje);
+                    registroEventos.push(mensaje);
+                    listaGeneralVehiculos.add(vehiculo);
+                }
+
             }
         }
     }
@@ -550,4 +578,25 @@ public class Simulador {
     private void mostrarComplejidades() {
         arbolIntersecciones.imprimir();
     }
+
+    public PriorityQueueI getArbolIntersecciones() {
+        return arbolIntersecciones;
+    }
+
+    public Stack<String> getRegistroEventos() {
+        return registroEventos;
+    }
+
+    public HashTable getTablaVehiculos() {
+        return tablaVehiculos;
+    }
+
+    public LinkedList<Vehiculo> getListaDuplicados() {
+        return listaDuplicados;
+    }
+
+    public LinkedList<Vehiculo> getListaGeneralVehiculos() {
+        return listaGeneralVehiculos;
+    }
+
 }

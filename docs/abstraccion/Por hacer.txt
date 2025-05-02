@@ -1,20 +1,13 @@
 		en simulacion:
-- evitar colisiones por placa duplicada.
-- ver carril mas congestionado.
+
 		en reportes:
-- 
-- Ordenar por tiempo, tipo de vehiculo, numero de vehiculosCirculados.
-- Tipos de ordenamiento (insercion directa, quickSort, metodo de la sacudidad).
+
 - Mostrar reportes de: 
-	* Ranking de vehiculos por nivel de prioridad y tiempo de cruce.
 	* Cantidad total de vehiculos que cruzaron por cada carril.
 	* Tiempo promedio de espera por tipo de vehiculo.
-	* Lista de placas duplicadas.
-	* Registro de los ultimos 20 eventos.
 
 		en docs:
 - documentacion tecnica.
 - manual de usuario.
-
 
 /home/ronyrojas/Escritorio/vehiculos.csv

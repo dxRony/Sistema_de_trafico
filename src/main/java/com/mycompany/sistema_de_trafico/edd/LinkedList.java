@@ -63,10 +63,10 @@ public class LinkedList<T> {
     public void imprimir() {
         Node<T> current = head;
         while (current != null) {
-            System.out.print(current.getData() + " -> ");
+            System.out.print(current.getData() + "\n");
             current = current.getNext();
         }
-        System.out.println("Fin de lista");
+        System.out.println();
     }
 
     public Vehiculo buscarPorPlaca(String placa) {

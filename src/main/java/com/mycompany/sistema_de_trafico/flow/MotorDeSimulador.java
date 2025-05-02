@@ -8,6 +8,7 @@ import com.mycompany.sistema_de_trafico.util.Archivo;
 
 public class MotorDeSimulador {
     private boolean finalizarEjecucion = false;
+    Reporte reporte = new Reporte();
 
     public void mostrarMenu() {
 
@@ -33,6 +34,8 @@ public class MotorDeSimulador {
 
                 case 3:
                     finalizarEjecucion = true;
+                    System.out.println("Finalizando ejecucion...");
+                    System.out.println("Bye");
                     break;
 
                 default:
@@ -60,9 +63,15 @@ public class MotorDeSimulador {
         System.out.println("\nINICIANDO SIMULADOR");
         Simulador simulador = new Simulador(listaVehiculos, ancho, alto, tamañoTablaHash);
         simulador.iniciarSimulador();
+        System.out.println("Simulacion terminada.\nGenerando reportes...");
+        // cuando termina la simulacion se recolectan los datos a los reportes
+        reporte.setRegistroUltimosEventos(simulador.getRegistroEventos());
+        reporte.setListaVehiculos(simulador.getListaGeneralVehiculos());
+        reporte.setVehiculosDuplicados(simulador.getListaDuplicados());
     }
 
     private void verReportes() {
-
+        System.out.println("Mostrando reportes...");
+        reporte.mostrarOpcionesReportes();
     }
 }
