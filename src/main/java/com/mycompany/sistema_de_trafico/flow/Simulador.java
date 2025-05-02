@@ -29,8 +29,7 @@ public class Simulador {
     private HashTable tablaVehiculos;
     private boolean simulacionTerminada;
     private char[] letrasFilas = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
-            'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };;
-
+            'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
     private Scanner sn;
 
     public Simulador(LinkedList<Vehiculo> vehiculosCargados, int anchoCiudad, int altoCiudad, int tamañoTablaHash) {
@@ -129,6 +128,7 @@ public class Simulador {
                 if (cola != null) {
                     cola.insertar(vehiculo);
                     vehiculosRepartidos++;
+                    vehiculo.setInterseccionActual(interseccionOrigen.getNombre());
                     tablaVehiculos.insertar(vehiculo);
                     interseccionOrigen.setVehiculosCirculados(interseccionOrigen.getVehiculosCirculados() + 1);
                 }
@@ -198,8 +198,9 @@ public class Simulador {
         System.out.println("4. Agregar vehiculo manualmente.");
         System.out.println("5. Ver vehiculo existente.");
         System.out.println("6. Ver vehiculos en destino y no en destino.");
-        System.out.println("7. Mostrar complejidades de intersecciones.");
-        System.out.println("8. Terminar simulacion.");
+        System.out.println("7. Mostrar ultimos eventos.");
+        System.out.println("8. Mostrar complejidades de intersecciones.");
+        System.out.println("9. Terminar simulacion.");
         opcion = sn.nextInt();
         return opcion;
     }
@@ -217,7 +218,7 @@ public class Simulador {
                 break;
             case 3:
                 System.out.println("\nGenerando bloqueo...");
-                // generarBloqueo();
+                generarBloqueo();
                 break;
             case 4:
                 System.out.println("\nAgregando vehiculo manualmente...");
@@ -225,17 +226,21 @@ public class Simulador {
                 break;
             case 5:
                 System.out.println("\nMostrando vehiculo...");
-                // verVehiculo();
+                verVehiculo();
                 break;
             case 6:
                 System.out.println("\nMostrando vehiculos...");
                 mostrarVehiculosEnDestino();
                 break;
             case 7:
+                System.out.println("\nMostrando ultimos 20 eventos...");
+                mostrarUltimosEventos();
+                break;
+            case 8:
                 System.out.println("\nMostrando complejidades de intersecciones...");
                 mostrarComplejidades();
                 break;
-            case 8:
+            case 9:
                 System.out.println("\nAbandonando simulacion...");
                 simulacionTerminada = true;
                 break;
@@ -260,7 +265,7 @@ public class Simulador {
         }
         String nombreOrigen = interseccionPrioritaria.getNombre();
         String mensaje = "Moviendo trafico en interseccion: " + nombreOrigen
-                + "\nCon prioridad: " + interseccionPrioritaria.getComplejidad();
+                + ", con prioridad: " + interseccionPrioritaria.getComplejidad();
 
         System.out.println(mensaje);
         registroEventos.push(mensaje);
@@ -347,7 +352,8 @@ public class Simulador {
             // verificando si la interseccion a la que se movera no este bloqueada
             moverVehiculo(vehiculo, origen, interseccionDestino, filaDestino, columnaDestino, nuevaFila, nuevaColumna);
         } else {
-            System.out.println("El vehiculo no se pudo mover por que la interseccion destino esta bloqueada.");
+            System.out.println("El vehiculo no se pudo mover por que la interseccion destino con nombre: "
+                    + interseccionDestino.getNombre() + ", esta bloqueada.");
             vehiculo.setTiempoDeEspera(vehiculo.getTiempoDeEspera() + 1);
             colaTemporal.insertar(vehiculo);
         }
@@ -386,6 +392,7 @@ public class Simulador {
             String mensaje = "Vehiculo " + vehiculo.getPlaca() + " se movio de " +
                     origen.getNombre() + " a " + destino.getNombre() + ", al carril: " + proximaDireccion + ",";
             vehiculo.setTiempoDeEspera(vehiculo.getTiempoDeEspera() + 1);
+            vehiculo.setInterseccionActual(destino.getNombre());
             System.out.println(mensaje);
             registroEventos.push(mensaje);
             destino.setVehiculosCirculados(destino.getVehiculosCirculados() + 1);
@@ -462,6 +469,17 @@ public class Simulador {
     }
 
     private void generarBloqueo() {
+        Scanner sn = new Scanner(System.in);
+        System.out.print("Ingresa el nombre de la interseccion donde quieres generar el bloqueo: ");
+        String nombreInterseccion = sn.next();
+        Interseccion interseccionABloquear = obtenerInterseccion(nombreInterseccion);
+        if (interseccionABloquear != null) {
+            System.out.println("Bloqueando interseccion");
+            interseccionABloquear.setBloqueda(true);
+            String mensaje = "Bloqueando interseccion: " + interseccionABloquear.getNombre();
+            System.out.println(mensaje);
+            registroEventos.push(mensaje);
+        }
     }
 
     private void agregarVehiculo() {
@@ -483,7 +501,6 @@ public class Simulador {
         Vehiculo nuevoVehiculo = new Vehiculo(tipoVehiculo, placa, interSeccionOrigen, interseccionDestino, prioridad,
                 tiempoDeEspera);
         colocarVehiculo(nuevoVehiculo);
-        System.out.println("Agregando vehiculo: " + nuevoVehiculo.toString());
     }
 
     private void colocarVehiculo(Vehiculo vehiculo) {
@@ -496,14 +513,24 @@ public class Simulador {
                 cola.insertar(vehiculo);
                 tablaVehiculos.insertar(vehiculo);
                 interseccionOrigen.setVehiculosCirculados(interseccionOrigen.getVehiculosCirculados() + 1);
-                System.out.println("Se agrego el vehiculo correctamente al sistema.");
-                System.out.println(vehiculo.toString());
+                vehiculo.setInterseccionActual(interseccionOrigen.getNombre());
+                String mensaje = "Agregando vehiculo: " + vehiculo.toString();
+                System.out.println(mensaje);
+                registroEventos.push(mensaje);
             }
         }
     }
 
     private void verVehiculo() {
-        
+        Scanner sn = new Scanner(System.in);
+        System.out.print("Ingresa la placa del vehiculo que quieres ver: ");
+        String placaABuscar = sn.next();
+        Vehiculo vehiculoBuscado = tablaVehiculos.buscar(placaABuscar);
+        if (vehiculoBuscado != null) {
+            System.out.println(vehiculoBuscado.toString());
+        } else {
+            return;
+        }
     }
 
     private void mostrarVehiculosEnDestino() {
@@ -513,6 +540,11 @@ public class Simulador {
         System.out.println("2. Vehiculos no en destino.");
         int opcion = sn.nextInt();
         tablaVehiculos.mostrarVehiculosEnDestino(tablaVehiculos, opcion);
+    }
+
+    private void mostrarUltimosEventos() {
+        registroEventos.imprimirUltimosEventos();
+
     }
 
     private void mostrarComplejidades() {

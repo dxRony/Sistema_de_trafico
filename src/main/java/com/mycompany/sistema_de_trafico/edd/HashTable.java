@@ -39,6 +39,7 @@ public class HashTable {
     }
 
     public Vehiculo buscar(String placa) {
+        System.out.println("Buscando vehiculo con placa: " + placa);
         // obteniendo el indice del vehiculo a buscar
         int indice = funcionHash(placa);
         // buscando y retornando al vehivulo por la placa

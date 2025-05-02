@@ -7,6 +7,7 @@ public class Vehiculo {
     private String placa;
     private String interseccionOrigen;
     private String interseccionDestino;
+    private String interseccionActual;
     private int prioridad;
     private int tiempoDeEspera;
     private boolean enDestino;
@@ -81,10 +82,20 @@ public class Vehiculo {
         this.enDestino = enDestino;
     }
 
+    public String getInterseccionActual() {
+        return interseccionActual;
+    }
+
+    public void setInterseccionActual(String interseccionActual) {
+        this.interseccionActual = interseccionActual;
+    }
+
     @Override
     public String toString() {
         return "Vehiculo [tipo = " + tipo + ", placa = " + placa + ", interseccionOrigen = " + interseccionOrigen
-                + ", interseccionDestino = " + interseccionDestino + ", prioridad = " + prioridad + ", tiempoDeEspera = "
-                + tiempoDeEspera + ", enDestino = " + enDestino + "]";
+                + ", interseccionDestino = " + interseccionDestino + ", interseccionActual = " + interseccionActual
+                + ", prioridad = " + prioridad + ", tiempoDeEspera = " + tiempoDeEspera + ", enDestino = " + enDestino
+                + "]";
     }
+
 }

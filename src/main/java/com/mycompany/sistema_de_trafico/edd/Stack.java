@@ -18,7 +18,7 @@ public class Stack<T> {
 
     public T pop() {
         if (isEmpty()) {
-            System.out.println("La pila esta vacia");
+            System.out.println("La pila esta vacia.");
             return null;
         }
         T data = top.getData();
@@ -29,7 +29,7 @@ public class Stack<T> {
 
     public T peek() {
         if (isEmpty()) {
-            System.out.println("La pila esta vacia");
+            System.out.println("La pila esta vacia.");
             return null;
         }
         T topData = top.getData();
@@ -38,18 +38,31 @@ public class Stack<T> {
 
     public void imprimir() {
         if (isEmpty()) {
-            System.out.println("La pila esta vacia");
+            System.out.println("La pila esta vacia.");
             return;
         }
 
         System.out.println("\nMostrando pila");
         Node<T> current = top;
         while (current != null) {
-            System.out.println("  "+current.getData());
-            System.out.println("  |");            
+            System.out.println("  " + current.getData() + "\n");
             current = current.getNext();
         }
         System.out.println("Fin de pila\n");
+    }
+
+    public void imprimirUltimosEventos() {
+        if (isEmpty()) {
+            System.out.println("La pila esta vacia.");
+            return;
+        }
+        int eventos = 1;
+        Node<T> current = top;
+        while (current != null && eventos <= 20) {
+            System.out.println(eventos + " ." + current.getData() + "\n");
+            current = current.getNext();
+            eventos++;
+        }
     }
 
     public boolean isEmpty() {
