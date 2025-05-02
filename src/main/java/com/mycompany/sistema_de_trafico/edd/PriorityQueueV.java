@@ -54,11 +54,9 @@ public class PriorityQueueV {
 
     public void imprimir() {
         if (estaVacia()) {
-            System.out.println("Cola de prioridad vacía\n");
+            System.out.println("Cola de vehiculos vacia.\n");
             return;
         }
-
-        System.out.println("Mostrando cola de vehiculos:");
 
         Node<Vehiculo> actual = head;
         int posicion = 1;
@@ -68,7 +66,8 @@ public class PriorityQueueV {
             actual = actual.getNext();
             posicion++;
         }
-        System.out.println("======================================\n");
+        System.out.println(
+                "===========================================================================================================================================================\n");
 
     }
 

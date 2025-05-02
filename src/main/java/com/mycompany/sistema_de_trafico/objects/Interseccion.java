@@ -16,11 +16,13 @@ public class Interseccion {
     PriorityQueueV colaOeste;
     char representacionConsola;
     TipoInterseccion tipoInterseccion;
+    int vehiculosCirculados;
 
     public Interseccion(String nombre, TipoInterseccion tipoInterseccion) {
         this.complejidad = 0;
         this.nombre = nombre;
         this.bloqueda = false;
+        this.vehiculosCirculados = 0;
         this.tipoInterseccion = tipoInterseccion;
 
         this.crearColasInterseccion();
@@ -216,6 +218,14 @@ public class Interseccion {
 
     public PriorityQueueV getColaOeste() {
         return colaOeste;
+    }
+
+    public int getVehiculosCirculados() {
+        return vehiculosCirculados;
+    }
+
+    public void setVehiculosCirculados(int vehiculosCirculados) {
+        this.vehiculosCirculados = vehiculosCirculados;
     }
 
 }

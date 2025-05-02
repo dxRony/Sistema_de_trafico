@@ -1,9 +1,4 @@
-
 		en simulacion:
-- colocar prioridad atendida en consola.
-- agregar atributo bool enDestino para los vehiculos.
-- listar todos los vehiculos que esta en destino en las opciones de la simulacion.
-- listar todos los vehiculos que no estan en destino en las opciones de la simulacion
 - actualizar tiempo cada vez que se opero un vehiculo, se haya movido o no.
 - agregar atributo a interseccion vehiculosCirculados, para llevar el control las veces
   que un vehiculo paso por la interseccion.

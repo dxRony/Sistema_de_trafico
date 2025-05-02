@@ -11,6 +11,7 @@ import com.mycompany.sistema_de_trafico.edd.PriorityQueueV;
 import com.mycompany.sistema_de_trafico.edd.Stack;
 import com.mycompany.sistema_de_trafico.enums.Direccion;
 import com.mycompany.sistema_de_trafico.enums.TipoInterseccion;
+import com.mycompany.sistema_de_trafico.enums.TipoVehiculo;
 import com.mycompany.sistema_de_trafico.objects.Interseccion;
 import com.mycompany.sistema_de_trafico.objects.Vehiculo;
 
@@ -129,6 +130,7 @@ public class Simulador {
                     cola.insertar(vehiculo);
                     vehiculosRepartidos++;
                     tablaVehiculos.insertar(vehiculo);
+                    interseccionOrigen.setVehiculosCirculados(interseccionOrigen.getVehiculosCirculados() + 1);
                 }
 
             } else {
@@ -195,8 +197,9 @@ public class Simulador {
         System.out.println("3. Generar bloqueo.");
         System.out.println("4. Agregar vehiculo manualmente.");
         System.out.println("5. Ver vehiculo existente.");
-        System.out.println("6. Mostrar complejidades de intersecciones.");
-        System.out.println("7. Terminar simulacion.");
+        System.out.println("6. Ver vehiculos en destino y no en destino.");
+        System.out.println("7. Mostrar complejidades de intersecciones.");
+        System.out.println("8. Terminar simulacion.");
         opcion = sn.nextInt();
         return opcion;
     }
@@ -204,36 +207,40 @@ public class Simulador {
     private void realizarAccion(int opcion) {
         switch (opcion) {
             case 1:
-                System.out.println("Iniciando movimiento de trafico.");
+                System.out.println("\nIniciando movimiento de trafico...");
                 moverTrafico();
                 break;
 
             case 2:
-                System.out.println("Viendo estado de interseccion.");
+                System.out.println("\nViendo estado de interseccion...");
                 verEstadoInterseccion();
                 break;
             case 3:
-                System.out.println("Generando bloqueo.");
-                generarBloqueo();
+                System.out.println("\nGenerando bloqueo...");
+                // generarBloqueo();
                 break;
             case 4:
-                System.out.println("Agregando vehiculo manualmente.");
+                System.out.println("\nAgregando vehiculo manualmente...");
                 agregarVehiculo();
                 break;
             case 5:
-                System.out.println("Mostrando vehiculo.");
-                verVehiculo();
+                System.out.println("\nMostrando vehiculo...");
+                // verVehiculo();
                 break;
             case 6:
-                System.out.println("Mostrando complejidades de intersecciones.");
-                mostrarComplejidades();
+                System.out.println("\nMostrando vehiculos...");
+                mostrarVehiculosEnDestino();
                 break;
             case 7:
-                System.out.println("Abandonando simulacion.");
+                System.out.println("\nMostrando complejidades de intersecciones...");
+                mostrarComplejidades();
+                break;
+            case 8:
+                System.out.println("\nAbandonando simulacion...");
                 simulacionTerminada = true;
                 break;
             default:
-                System.out.println("Syntax error.");
+                System.out.println("\nSyntax error.");
                 break;
         }
     }
@@ -248,11 +255,15 @@ public class Simulador {
         }
         // verificando que no este bloqueada
         if (interseccionPrioritaria.isBloqueda()) {
-            manejarBloqueo(interseccionPrioritaria);
+            verificarBloqueo(interseccionPrioritaria);
             return;
         }
         String nombreOrigen = interseccionPrioritaria.getNombre();
-        System.out.println("Moviendo trafico en interseccion: " + nombreOrigen);
+        String mensaje = "Moviendo trafico en interseccion: " + nombreOrigen
+                + "\nCon prioridad: " + interseccionPrioritaria.getComplejidad();
+
+        System.out.println(mensaje);
+        registroEventos.push(mensaje);
         // obteniendo numero de fila y columna de la interseccion a trabajar
         int filaActual = obtenerNumeroDeFila(nombreOrigen);
         int columnaActual = obtenerNumeroColumna(nombreOrigen);
@@ -270,7 +281,7 @@ public class Simulador {
         arbolIntersecciones.insertar(interseccionPrioritaria);
     }
 
-    private void manejarBloqueo(Interseccion interseccion) {
+    private void verificarBloqueo(Interseccion interseccion) {
         System.out.println("En la interseccion: " + interseccion.getNombre()
                 + ", no se puede mover el trafico porque hay un bloqueo.");
         System.out.println("Se necesita liberar el bloqueo para continuar...");
@@ -304,6 +315,7 @@ public class Simulador {
         if (filaActual == filaDestino && columnaActual == columnaDestino) {
             // validacion extra por si el vehiculo inicia en su destino
             System.out.println("El vehiculo: " + vehiculo.getPlaca() + ", ya esta en su destino.");
+            vehiculo.setEnDestino(true);
             return;
         }
         // calculando mocimineto
@@ -312,7 +324,7 @@ public class Simulador {
 
         int distanciaFila = filaDestino - filaActual;
         int distanciaColumna = columnaDestino - columnaActual;
-        Direccion direccionMovimiento = calcularDireccion(distanciaFila, distanciaColumna);
+        Direccion direccionMovimiento = calcularDireccionMovimiento(distanciaFila, distanciaColumna);
         switch (direccionMovimiento) {
             case NORTE:
                 nuevaFila--;
@@ -336,11 +348,12 @@ public class Simulador {
             moverVehiculo(vehiculo, origen, interseccionDestino, filaDestino, columnaDestino, nuevaFila, nuevaColumna);
         } else {
             System.out.println("El vehiculo no se pudo mover por que la interseccion destino esta bloqueada.");
+            vehiculo.setTiempoDeEspera(vehiculo.getTiempoDeEspera() + 1);
             colaTemporal.insertar(vehiculo);
         }
     }
 
-    private Direccion calcularDireccion(int distanciaFila, int distanciaColumna) {
+    private Direccion calcularDireccionMovimiento(int distanciaFila, int distanciaColumna) {
 
         if (distanciaColumna != 0) {
             if (distanciaColumna < 0) {
@@ -368,17 +381,21 @@ public class Simulador {
         Direccion proximaDireccion = calcularProximaDireccion(distanciaRestanteX, distanciaRestanteY);
 
         if (proximaDireccion != null) {
-            //si hay proxima direccion se inserta en el carril hacia ella
+            // si hay proxima direccion se inserta en el carril hacia ella
             destino.getColaPorDireccion(proximaDireccion).insertar(vehiculo);
             String mensaje = "Vehiculo " + vehiculo.getPlaca() + " se movio de " +
-                    origen.getNombre() + ", a " + destino.getNombre() + ", al carril: " + proximaDireccion + ",";
+                    origen.getNombre() + " a " + destino.getNombre() + ", al carril: " + proximaDireccion + ",";
+            vehiculo.setTiempoDeEspera(vehiculo.getTiempoDeEspera() + 1);
             System.out.println(mensaje);
             registroEventos.push(mensaje);
+            destino.setVehiculosCirculados(destino.getVehiculosCirculados() + 1);
             arbolIntersecciones.actualizarInterseccion(destino.getNombre());
         } else {
-            //si no hay proxima direccion, el vehiculo ya esta en su destino
+            // si no hay proxima direccion, el vehiculo ya esta en su destino
             String mensaje = "Vehiculo con placa: " + vehiculo.getPlaca()
                     + ", llego a su destino: " + vehiculo.getInterseccionDestino();
+            vehiculo.setTiempoDeEspera(vehiculo.getTiempoDeEspera() + 1);
+            vehiculo.setEnDestino(true);
             System.out.println(mensaje);
             registroEventos.push(mensaje);
         }
@@ -424,6 +441,7 @@ public class Simulador {
             System.out.println("Complejidad: " + interseccionBuscada.getComplejidad());
             System.out.println("Hay bloqueo?: " + interseccionBuscada.isBloqueda());
             System.out.println("Representacion en consola: " + interseccionBuscada.getRepresentacionConsola());
+            System.out.println("Vehiculos circulados: " + interseccionBuscada.getVehiculosCirculados());
             if (interseccionBuscada.getColaNorte() != null) {
                 System.out.println("Cola norte:");
                 interseccionBuscada.getColaNorte().imprimir();
@@ -447,9 +465,54 @@ public class Simulador {
     }
 
     private void agregarVehiculo() {
+        Scanner sn = new Scanner(System.in);
+        System.out.println("Ingresa los datos del vehiculo manualmente!!!");
+        System.out.print("Ingresa el tipo: ");
+        String tipo = sn.next();
+        TipoVehiculo tipoVehiculo = TipoVehiculo.valueOf(tipo);
+        System.out.print("Ingresa la placa del vehiculo: ");
+        String placa = sn.next();
+        System.out.print("Ingresa la interseccion de origen: ");
+        String interSeccionOrigen = sn.next();
+        System.out.print("Ingresa la interseccion de destino: ");
+        String interseccionDestino = sn.next();
+        System.out.print("Ingresa la prioridad: ");
+        int prioridad = sn.nextInt();
+        System.out.print("Ingresa el tiempo de espera: ");
+        int tiempoDeEspera = sn.nextInt();
+        Vehiculo nuevoVehiculo = new Vehiculo(tipoVehiculo, placa, interSeccionOrigen, interseccionDestino, prioridad,
+                tiempoDeEspera);
+        colocarVehiculo(nuevoVehiculo);
+        System.out.println("Agregando vehiculo: " + nuevoVehiculo.toString());
+    }
+
+    private void colocarVehiculo(Vehiculo vehiculo) {
+        Interseccion interseccionOrigen = obtenerInterseccion(vehiculo.getInterseccionOrigen());
+        Interseccion interseccionDestino = obtenerInterseccion(vehiculo.getInterseccionDestino());
+
+        if (interseccionOrigen != null && interseccionDestino != null) {
+            PriorityQueueV cola = obtenerCola(interseccionOrigen);
+            if (cola != null) {
+                cola.insertar(vehiculo);
+                tablaVehiculos.insertar(vehiculo);
+                interseccionOrigen.setVehiculosCirculados(interseccionOrigen.getVehiculosCirculados() + 1);
+                System.out.println("Se agrego el vehiculo correctamente al sistema.");
+                System.out.println(vehiculo.toString());
+            }
+        }
     }
 
     private void verVehiculo() {
+        
+    }
+
+    private void mostrarVehiculosEnDestino() {
+        Scanner sn = new Scanner(System.in);
+        System.out.println("Selecciona que vehiculos quieres ver:");
+        System.out.println("1. Vehiculos en destino.");
+        System.out.println("2. Vehiculos no en destino.");
+        int opcion = sn.nextInt();
+        tablaVehiculos.mostrarVehiculosEnDestino(tablaVehiculos, opcion);
     }
 
     private void mostrarComplejidades() {

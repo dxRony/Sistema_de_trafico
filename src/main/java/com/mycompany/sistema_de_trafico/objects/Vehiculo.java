@@ -9,6 +9,7 @@ public class Vehiculo {
     private String interseccionDestino;
     private int prioridad;
     private int tiempoDeEspera;
+    private boolean enDestino;
 
     public Vehiculo(TipoVehiculo tipo, String placa, String interseccionOrigen, String interseccionDestino,
             int prioridad, int tiempoDeEspera) {
@@ -18,6 +19,7 @@ public class Vehiculo {
         this.interseccionDestino = interseccionDestino;
         this.prioridad = prioridad;
         this.tiempoDeEspera = tiempoDeEspera;
+        this.enDestino = false;
     }
 
     public Vehiculo() {
@@ -71,11 +73,18 @@ public class Vehiculo {
         this.tiempoDeEspera = tiempoDeEspera;
     }
 
-    @Override
-    public String toString() {
-        return "Vehiculo [tipo=" + tipo + ", placa=" + placa + ", interseccionOrigen=" + interseccionOrigen
-                + ", interseccionDestino=" + interseccionDestino + ", prioridad=" + prioridad + ", tiempoDeEspera="
-                + tiempoDeEspera + "]";
+    public boolean isEnDestino() {
+        return enDestino;
     }
 
+    public void setEnDestino(boolean enDestino) {
+        this.enDestino = enDestino;
+    }
+
+    @Override
+    public String toString() {
+        return "Vehiculo [tipo = " + tipo + ", placa = " + placa + ", interseccionOrigen = " + interseccionOrigen
+                + ", interseccionDestino = " + interseccionDestino + ", prioridad = " + prioridad + ", tiempoDeEspera = "
+                + tiempoDeEspera + ", enDestino = " + enDestino + "]";
+    }
 }

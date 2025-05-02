@@ -45,10 +45,32 @@ public class HashTable {
         return tabla[indice].buscarPorPlaca(placa);
     }
 
-    public void imprimir() {
-        for (int i = 0; i < tamaño; i++) {
-            System.out.print("bucket " + i + ": ");
-            tabla[i].imprimir();
+    public void mostrarVehiculosEnDestino(HashTable tablaVehiculos, int opcion) {
+        int numero = 0;
+        System.out.println();
+        for (int i = 0; i < tablaVehiculos.tamaño; i++) {
+
+            // recorriendo cada bucket de la tabla
+            LinkedList<Vehiculo> bucketActual = tablaVehiculos.tabla[i];
+            // recorriendo lista que esta en el bucket [i]
+            Node<Vehiculo> actual = bucketActual.getHead();
+
+            while (actual != null) {
+                Vehiculo vehiculoActual = actual.getData();
+                if (opcion == 1) {
+                    if (vehiculoActual.isEnDestino()) {
+                        numero++;
+                        System.out.println(numero + ". " + vehiculoActual.toString());
+                    }
+                } else if (opcion == 2) {
+                    if (!vehiculoActual.isEnDestino()) {
+                        numero++;
+                        System.out.println(numero + ". " + vehiculoActual.toString());
+                    }
+                }
+                actual = actual.getNext();
+            }
         }
     }
+
 }
