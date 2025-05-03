@@ -7,53 +7,47 @@ import com.mycompany.sistema_de_trafico.objects.Vehiculo;
 public class MetodoDeLaSacudida {
 
     public void ordenarPorTiempoDeEspera(LinkedList<Vehiculo> lista) {
-        // bandera para finalizar proceso
-        boolean ordenado;
+        // bandera para finalizar proceso                   
+        boolean ordenado;                                           //1
         // limite inferior
-        Node<Vehiculo> primero = lista.getHead();
+        Node<Vehiculo> primero = lista.getHead();                   //1
         // limite superior
-        Node<Vehiculo> ultimo = null;
-
+        Node<Vehiculo> ultimo = null;                               //1
         do {
-            ordenado = true;
-            Node<Vehiculo> actual = primero;
-
+            ordenado = true;                                        //n
+            Node<Vehiculo> actual = primero;                        //n
             // recorriendo de izquierda a derecha
-            while (actual.getNext() != ultimo) {
+            while (actual.getNext() != ultimo) {                    //n^2
                 if (actual.getData().getTiempoDeEspera() < actual.getNext().getData().getTiempoDeEspera()) {
                     // si el actual es menor que el siguiente, se intercambian los datos del nodo
-                    Vehiculo tmp = actual.getData();
-                    actual.setData(actual.getNext().getData());
-                    actual.getNext().setData(tmp);
+                    Vehiculo tmp = actual.getData();                //n^2
+                    actual.setData(actual.getNext().getData());     //n^2
+                    actual.getNext().setData(tmp);                  //n^2
                     // se cambia la bandera para seguir iterando
-                    ordenado = false;
+                    ordenado = false;                               //n^2
                 }
-                actual = actual.getNext();
+                actual = actual.getNext();                          //n^2
             }
             // actualizando limite superior
-            ultimo = actual;
-
-            if (ordenado) {
-                break;
+            ultimo = actual;                                        //n
+            if (ordenado) {                                         //n
+                break;                                              //n
             }
-
-            ordenado = true;
-
+            ordenado = true;                                        //n
             // recorriendo de derecha a izquierda
-            actual = ultimo;
-            while (actual != primero && actual.getPrev() != null) {
+            actual = ultimo;                                        //n
+            while (actual != primero && actual.getPrev() != null) { 
                 if (actual.getPrev().getData().getTiempoDeEspera() < actual.getData().getTiempoDeEspera()) {
                     // si el anterior es menor que le actual, se intercambian los datos del nodo
-                    Vehiculo tmp = actual.getPrev().getData();
-                    actual.getPrev().setData(actual.getData());
-                    actual.setData(tmp);
-                    ordenado = false;
+                    Vehiculo tmp = actual.getPrev().getData();      //n^2
+                    actual.getPrev().setData(actual.getData());     //n^2
+                    actual.setData(tmp);                            //n^2
+                    ordenado = false;                               //n^2
                 }
-                actual = actual.getPrev();
+                actual = actual.getPrev();                          //n^2
             }
             // actualizando limite inferior
-            primero = actual;
-
-        } while (!ordenado);
+            primero = actual;                                       //n
+        } while (!ordenado);                                        //n
     }
 }

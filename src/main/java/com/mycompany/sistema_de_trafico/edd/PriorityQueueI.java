@@ -12,29 +12,29 @@ public class PriorityQueueI {
     }
 
     public void insertar(Interseccion interseccion) {
-        Node<Interseccion> nuevo = new Node<>(interseccion);
+        Node<Interseccion> nuevo = new Node<>(interseccion);                                //1
 
-        if (head == null || compararPorComplejidad(interseccion, head.getData()) > 0) {
-            nuevo.setNext(head);
-            if (head != null) {
-                head.setPrev(nuevo);
+        if (head == null || compararPorComplejidad(interseccion, head.getData()) > 0) {     //1
+            nuevo.setNext(head);                                                            //1
+            if (head != null) {                                                             //1
+                head.setPrev(nuevo);                                                        //1
             }
-            head = nuevo;
-        } else {
-            Node<Interseccion> actual = head;
-            while (actual.getNext() != null &&
-                    compararPorComplejidad(interseccion, actual.getNext().getData()) <= 0) {
-                actual = actual.getNext();
+            head = nuevo;                                                                   //1
+        } else {                                                                            //1
+            Node<Interseccion> actual = head;                                               //1
+            while (actual.getNext() != null &&                          
+                    compararPorComplejidad(interseccion, actual.getNext().getData()) <= 0) {//n
+                actual = actual.getNext();                                                  //n
             }
 
-            nuevo.setNext(actual.getNext());
-            if (actual.getNext() != null) {
-                actual.getNext().setPrev(nuevo);
+            nuevo.setNext(actual.getNext());                                                //1
+            if (actual.getNext() != null) {                                                 //1
+                actual.getNext().setPrev(nuevo);                                            //1
             }
-            actual.setNext(nuevo);
-            nuevo.setPrev(actual);
+            actual.setNext(nuevo);                                                          //1
+            nuevo.setPrev(actual);                                                          //1
         }
-        size++;
+        size++;                                                                             //1
     }
 
     private int compararPorComplejidad(Interseccion i1, Interseccion i2) {
@@ -42,92 +42,91 @@ public class PriorityQueueI {
     }
 
     public Interseccion desencolar() {
-        if (head == null) {
-            return null;
+        if (head == null) {                         //1
+            return null;                            //1
         }
 
-        Interseccion interseccion = head.getData();
-        head = head.getNext();
-        if (head != null) {
-            head.setPrev(null);
+        Interseccion interseccion = head.getData(); //1
+        head = head.getNext();                      //1
+        if (head != null) {                         //1
+            head.setPrev(null);                //1
         }
-        size--;
-        return interseccion;
+        size--;                                     //1
+        return interseccion;                        //1
     }
 
-    public boolean eliminar(Interseccion interseccion) {
-        Node<Interseccion> actual = head;
+    public boolean eliminar(Interseccion interseccion) {            //1
+        Node<Interseccion> actual = head;                           //1
 
-        while (actual != null) {
-            if (actual.getData().equals(interseccion)) {
-                if (actual.getPrev() != null) {
-                    actual.getPrev().setNext(actual.getNext());
-                } else {
-                    head = actual.getNext();
+        while (actual != null) {                                    //n
+            if (actual.getData().equals(interseccion)) {            //n
+                if (actual.getPrev() != null) {                     //n
+                    actual.getPrev().setNext(actual.getNext());     //n
+                } else {                                            //n
+                    head = actual.getNext();                        //n
                 }
 
-                if (actual.getNext() != null) {
-                    actual.getNext().setPrev(actual.getPrev());
+                if (actual.getNext() != null) {                     //n
+                    actual.getNext().setPrev(actual.getPrev());     //n
                 }
-
-                size--;
-                return true;
+                size--;                                             //n
+                return true;                                        //n
             }
-            actual = actual.getNext();
+            actual = actual.getNext();                              //n
         }
-        return false;
+        return false;                                               //1
     }
 
     public void actualizarInterseccion(String nombre) {
-        if (head == null)
-            return;
+        if (head == null){                                                      //1
+            return;                                                             //1
+        }
 
-        Node<Interseccion> actual = head;
+        Node<Interseccion> actual = head;                                       //1
 
-        while (actual != null) {
-            if (actual.getData().getNombre().equals(nombre)) {
+        while (actual != null) {                                                //n
+            if (actual.getData().getNombre().equals(nombre)) {                  //n
                 // Encontramos la intersección, ahora la quitamos de la cola
-                Interseccion interseccion = actual.getData();
+                Interseccion interseccion = actual.getData();                   //n
 
                 // Desenlazar el nodo actual
-                if (actual.getPrev() != null) {
-                    actual.getPrev().setNext(actual.getNext());
-                } else {
-                    head = actual.getNext(); // era la cabeza
+                if (actual.getPrev() != null) {                                 //n
+                    actual.getPrev().setNext(actual.getNext());                 //n
+                } else {                                                        //n
+                    head = actual.getNext(); // era la cabeza                   //n
                 }
 
-                if (actual.getNext() != null) {
-                    actual.getNext().setPrev(actual.getPrev());
+                if (actual.getNext() != null) {                                 //n
+                    actual.getNext().setPrev(actual.getPrev());                 //n
                 }
-
-                size--;
+                size--;                                                         //n
 
                 // Calcular nueva complejidad
-                interseccion.calcularComplejidad();
+                interseccion.calcularComplejidad();                             //n
 
                 // Reinsertar en la cola
-                insertar(interseccion);
-                return;
+                insertar(interseccion);                                         //n
+                return;                                                         //n
             }
-            actual = actual.getNext();
+            actual = actual.getNext();                                          //n
         }
     }
 
-    public void imprimir() {
-        if (estaVacia()) {
-            System.out.println("Cola de prioridad vacia\n");
-            return;
+    public void imprimir() {                                                    
+        if (estaVacia()) {                                                    //1
+            System.out.println("Cola de prioridad vacia\n");                //1
+            return;                                                             //1
         }
 
-        Node<Interseccion> actual = head;
-        int posicion = 1;
-        while (actual != null) {
-            Interseccion i = actual.getData();
+        Node<Interseccion> actual = head;                                   //1
+        int posicion = 1;                                                   //1
+        while (actual != null) {                                            //n
+            Interseccion i = actual.getData();                              //n
             System.out.println(posicion + ") " + i.getNombre() + " - complejidad: " + i.getComplejidad());
-            actual = actual.getNext();
-            posicion++;
+            actual = actual.getNext();                                      //n
+            posicion++;                                                     //n
         }
-        System.out.println("======================================\n");
+        System.out.println("======================================\n");     //1
     }
 
     public void mostrarVehiculosCirculados() {

@@ -24,9 +24,7 @@ public class Interseccion {
         this.bloqueda = false;
         this.vehiculosCirculados = 0;
         this.tipoInterseccion = tipoInterseccion;
-
         this.crearColasInterseccion();
-
     }
 
     public Interseccion() {

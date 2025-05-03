@@ -12,76 +12,75 @@ public class LinkedList<T> {
     }
 
     public void add(T data) {
-        Node<T> newNode = new Node<>(data);
+        Node<T> newNode = new Node<>(data);         //1
         if (head == null) {
-            head = newNode;
+            head = newNode;                         //1
         } else {
-            Node<T> current = head;
-            while (current.getNext() != null) {
-                current = current.getNext();
+            Node<T> current = head;                 //1              
+            while (current.getNext() != null) {     //n
+                current = current.getNext();        //n
             }
-            current.setNext(newNode);
-            newNode.setPrev(current);
-        }
-        size++;
+            current.setNext(newNode);               //1
+            newNode.setPrev(current);               //1
+        }   
+        size++;                                     //1
     }
 
     public T find(T data) {
-        Node<T> current = head;
-        while (current != null) {
-            if (current.getData().equals(data)) {
-                return current.getData();
+        Node<T> current = head;                     //1
+        while (current != null) {                   //n
+            if (current.getData().equals(data)) {   //n
+                return current.getData();           //n
             }
-            current = current.getNext();
+            current = current.getNext();            //n
         }
-        return null;
+        return null;                                //1
     }
 
     public boolean remove(T data) {
-        Node<T> current = head;
+        Node<T> current = head;                                     //1
 
-        while (current != null) {
-            if (current.getData().equals(data)) {
-                if (current.getPrev() != null) {
-                    current.getPrev().setNext(current.getNext());
+        while (current != null) {                                   //n
+            if (current.getData().equals(data)) {                   //n
+                if (current.getPrev() != null) {                    //n
+                    current.getPrev().setNext(current.getNext());   //n
                 } else {
-                    head = current.getNext();
+                    head = current.getNext();                       //n
                 }
 
-                if (current.getNext() != null) {
-                    current.getNext().setPrev(current.getPrev());
+                if (current.getNext() != null) {                    //n
+                    current.getNext().setPrev(current.getPrev());   //n
                 }
-
-                size--;
-                return true;
+                size--;                                             //n
+                return true;                                        //n
             }
-            current = current.getNext();
+            current = current.getNext();                            //n
         }
-        return false;
+        return false;                                               //n
     }
 
     public void imprimir() {
-        Node<T> current = head;
-        while (current != null) {
-            System.out.print(current.getData() + "\n");
-            current = current.getNext();
+        Node<T> current = head;                                     //1
+        while (current != null) {                                   //n
+            System.out.print(current.getData() + "\n");             //n
+            current = current.getNext();                            //n
         }
-        System.out.println();
+        System.out.println();                                       //1
     }
 
     public Vehiculo buscarPorPlaca(String placa) {
-        Node<T> current = head;
+        Node<T> current = head;                                     //1
 
-        while (current != null) {
-            if (current.getData() instanceof Vehiculo) {
-                Vehiculo vehiculo = (Vehiculo) current.getData();
-                if (vehiculo.getPlaca().equals(placa)) {
-                    return vehiculo;
+        while (current != null) {                                   //n
+            if (current.getData() instanceof Vehiculo) {            //n
+                Vehiculo vehiculo = (Vehiculo) current.getData();   //n
+                if (vehiculo.getPlaca().equals(placa)) {            //n
+                    return vehiculo;                                //n
                 }
             }
-            current = current.getNext();
+            current = current.getNext();                            //n
         }
-        return null;
+        return null;                                                //1
     }
 
     public boolean isEmpty() {
