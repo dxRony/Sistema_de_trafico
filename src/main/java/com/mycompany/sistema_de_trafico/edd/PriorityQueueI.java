@@ -86,14 +86,12 @@ public class PriorityQueueI {
 
         while (actual != null) {                                                //n
             if (actual.getData().getNombre().equals(nombre)) {                  //n
-                // Encontramos la intersección, ahora la quitamos de la cola
                 Interseccion interseccion = actual.getData();                   //n
 
-                // Desenlazar el nodo actual
                 if (actual.getPrev() != null) {                                 //n
                     actual.getPrev().setNext(actual.getNext());                 //n
                 } else {                                                        //n
-                    head = actual.getNext(); // era la cabeza                   //n
+                    head = actual.getNext();                                    //n
                 }
 
                 if (actual.getNext() != null) {                                 //n
@@ -101,10 +99,8 @@ public class PriorityQueueI {
                 }
                 size--;                                                         //n
 
-                // Calcular nueva complejidad
                 interseccion.calcularComplejidad();                             //n
 
-                // Reinsertar en la cola
                 insertar(interseccion);                                         //n
                 return;                                                         //n
             }
