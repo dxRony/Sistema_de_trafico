@@ -14,7 +14,6 @@
     
     <build>
         <plugins>
-            <!-- Plugin para compilación -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -24,7 +23,6 @@
                 </configuration>
             </plugin>
             
-            <!-- Plugin para generar JAR con manifiesto -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

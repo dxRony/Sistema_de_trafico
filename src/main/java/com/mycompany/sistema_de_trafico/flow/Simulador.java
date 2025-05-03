@@ -435,7 +435,7 @@ public class Simulador {
     }
 
     private int obtenerNumeroDeFila(String nombreInterseccion) {
-        return nombreInterseccion.charAt(0) - 'A';
+        return (int) nombreInterseccion.charAt(0) - 65;
     }
 
     private int obtenerNumeroColumna(String nombreInterseccion) {
