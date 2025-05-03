@@ -3,7 +3,5 @@
 		en reportes:
 
 		en docs:
-- documentacion tecnica.
-- manual de usuario.
 
 /home/ronyrojas/Escritorio/vehiculos.csv
