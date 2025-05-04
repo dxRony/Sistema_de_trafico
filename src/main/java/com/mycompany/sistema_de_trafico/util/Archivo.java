@@ -39,6 +39,8 @@ public class Archivo {
                     listaVehiculos.add(vehiculo);                               //n
                 } catch (IllegalArgumentException e) {                          //n
                     System.err.println("Error al procesar el dato " + e.getMessage());
+                } catch (Exception e){
+                    System.out.println("Error al procesar la linea");
                 }
             }
         } catch (IOException e) {

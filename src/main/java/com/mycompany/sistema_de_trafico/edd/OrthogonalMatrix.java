@@ -75,24 +75,24 @@ public class OrthogonalMatrix<T> {
 
     public void imprimir() {
         System.out.println("\nMapa de la ciudad:");                                 //1
-        System.out.println("******************************");                       //1
-        System.out.print("   ");                                                    //1
+        System.out.println("**************************************************");//1
+        System.out.print("    ");                                                    //1
         for (int x = 0; x < ancho; x++) {                                             //n
-            System.out.print(" " + (x + 1) + " ");                                    //n
+            System.out.printf("%3d", x + 1);                                    //n
         }
         System.out.println();                                                         //1  
         for (int y = 0; y < alto; y++) {                                              //n
-            System.out.print(letrasFilas[y] + "  ");                                    //n
+            System.out.printf("%-3s", letrasFilas[y]);                         //n
 
             Node<T> fila = obtenerNodo(0, y);                                       //n
             for (int x = 0; x < ancho && fila != null; x++) {                         //n^2
                 Interseccion interseccion = (Interseccion) fila.getData();            //n^2
-                System.out.print(" " + interseccion.getRepresentacionConsola() + " ");//n^2
+                System.out.printf("%3s", interseccion.getRepresentacionConsola());//n^2
                 fila = fila.getRight();                                               //n^2
             }
             System.out.println();                                                     //n
         }
-        System.out.println("******************************\n");                     //1
+        System.out.println("**************************************************\n"); //1
     }
 
 }
