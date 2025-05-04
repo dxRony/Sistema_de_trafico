@@ -3,6 +3,7 @@ package com.mycompany.sistema_de_trafico.edd;
 import com.mycompany.sistema_de_trafico.objects.Interseccion;
 
 public class AVLTree {
+    // raiz del arbol
     private Node<Interseccion> root;
 
     public AVLTree() {
@@ -17,24 +18,25 @@ public class AVLTree {
     private Node<Interseccion> insertarPriv(Node<Interseccion> nodo, Interseccion data) {
         // metodo de insercion, que funciona de manera recursiva
         if (nodo == null) {
-            // cuando el nodo actual sea null, se inserta el dato
+            // cuando el nodo actual sea null, se crea con el dato recibido
             return new Node<Interseccion>(data);
         }
-
-        // comparando complejidad de interseccion para ver a que subarbol va
+        // cuando el nodo no sea null
+        // comparando complejidad de interseccion
         if (data.getComplejidad() < nodo.getData().getComplejidad()) {
+            // si la complejidad es menor, va al lado izquierdo
             nodo.setLeft(insertarPriv(nodo.getLeft(), data));
         } else {
+            // si la complejidad es mayor, va al lado derecho
             nodo.setRight(insertarPriv(nodo.getRight(), data));
         }
         // actualizando la altura del nodo insertado
-        actualizarAltura(nodo);
+        actualizarAlturaNodo(nodo);
         // llamando a metodo de balanceo
         return balancear(nodo);
     }
 
-    private void actualizarAltura(Node<Interseccion> nodo) {
-        // metodo de actualizacion de altura
+    private void actualizarAlturaNodo(Node<Interseccion> nodo) {
         // obteniendo la altura de subarbol izquierdo
         int alturaIzq = getAltura(nodo.getLeft());
         // obteniendo la altura de subarbol derecho
@@ -59,108 +61,65 @@ public class AVLTree {
         return nodo.getHeight();
     }
 
-    private Node<Interseccion> balancear(Node<Interseccion> nodo) {
-        int balance = getFactorBalance(nodo);
-
-        if (balance > 1) {
-            // en este caso, el arbol izquierdo esta desbalanceado
-            if (getFactorBalance(nodo.getLeft()) < 0) {
-                // si el subarbol izquierdo tiene un factor < 0, es un caso LR
-                nodo.setLeft(rotacionIzquierda(nodo.getLeft()));
-            }
-            // si solo es necesaria una rotacion a la derecha, es un caso LL
-            return rotacionDerecha(nodo);
-        }
-
-        if (balance < -1) {
-            // en este caso, el arbol derecho esta desbalanceado
-            if (getFactorBalance(nodo.getRight()) > 0) {
-                // si el subarbol derecho tiene un factor > 0, es un caso RL
-                nodo.setRight(rotacionDerecha(nodo.getRight()));
-            }
-            // si solo es necesaria una rotacion a la izquierda, es un caso RR
-            return rotacionIzquierda(nodo);
-        }
-        // si no hay algun tipo de balanceo se retorna el nodo
-        return nodo;
-    }
-
-    private int getFactorBalance(Node<Interseccion> nodo) {
+    private int calcularDiferenciaDeAlturaHijos(Node<Interseccion> nodo) {
         // metodo para obtener el factor de balance
-        // si es -1, 0 o 1, el arbol esta balanceado
+        // si es -1, 0 o 1, el arbol esta balanceado, si no esta desbalanceado
         if (nodo == null) {
             return 0;
         }
-        return getAltura(nodo.getLeft()) - getAltura(nodo.getRight());
+        return (getAltura(nodo.getLeft()) - getAltura(nodo.getRight()));
     }
 
-    private Node<Interseccion> rotacionDerecha(Node<Interseccion> y) {
-        // guardando subarbol izquierdo del nodo recibido
-        Node<Interseccion> x = y.getLeft();
-        // guardando subarbol derecho de x
-        Node<Interseccion> T2 = x.getRight();
+    private Node<Interseccion> balancear(Node<Interseccion> nodo) {
+        int balance = calcularDiferenciaDeAlturaHijos(nodo);
 
-        // para x su nuevo subarbol derecho sera su antiguo padre
+        if (balance > 1) {
+            // en este caso hay desbalanceo izquierdo
+            if (calcularDiferenciaDeAlturaHijos(nodo.getLeft()) < 0) {
+                // si el subarbol izquierdo tiene una diferencia < 0, LR y luego LL
+                nodo.setLeft(rotacionIzquierda(nodo.getLeft()));
+            }
+            // rotacion derecha LL
+            return rotacionDerecha(nodo);
+        }
+        if (balance < -1) {
+            // en este caso hay desbalanceo derecho
+            if (calcularDiferenciaDeAlturaHijos(nodo.getRight()) > 0) {
+                // si el subarbol derecho tiene una diferencia > 0, RL y luego RR
+                nodo.setRight(rotacionDerecha(nodo.getRight()));
+            }
+            // rotacion izquierda RR
+            return rotacionIzquierda(nodo);
+        }
+        return nodo;
+    }
+
+    private Node<Interseccion> rotacionDerecha(Node<Interseccion> y) {       
+        Node<Interseccion> x = y.getLeft(); //hijo izquierdo de y
+        Node<Interseccion> z = x.getRight(); //hijo derecho de z
+        //x se convierte en el padre de y
         x.setRight(y);
-        // para y su nuevo subarbol izquierod sera el subarbol derecho de x
-        y.setLeft(T2);
-
+        //z se convierte en el hijo izquierdo de y
+        y.setLeft(z);
         // actualizando altura de ambos nodos
-        actualizarAltura(y);
-        actualizarAltura(x);
-
+        actualizarAlturaNodo(y);
+        actualizarAlturaNodo(x);
         // retornando la nueva raiz
         return x;
     }
 
     private Node<Interseccion> rotacionIzquierda(Node<Interseccion> x) {
-        // guardando subarbol derecho del nodo recibido
-        Node<Interseccion> y = x.getRight();
-        // guardando subarbol izquierdo de y
-        Node<Interseccion> T2 = y.getLeft();
-
-        // para y su nuevo izquierdo sera su antiguo padre
+        Node<Interseccion> y = x.getRight();//hijo derecho de x
+        Node<Interseccion> z = y.getLeft();//hijo izquierdo de y
+        //y se convierte en el padre de x
         y.setLeft(x);
-        // para el antiguo padre su subarbol derecho sera el subarbol izquierdo de y
-        x.setRight(T2);
-
+        //z se convierte en el hijo de derecho de x
+        x.setRight(z);
         // actualizando altura de ambos
-        actualizarAltura(x);
-        actualizarAltura(y);
-
+        actualizarAlturaNodo(x);
+        actualizarAlturaNodo(y);
         // retornando nueva raiz
         return y;
-    }
-
-    public void imprimir() {
-        imprimirDescendente(root, 0);
-    }
-
-    private void imprimirDescendente(Node<Interseccion> nodo, int espacio) {
-        if (nodo == null) {
-            return;
-        }
-        int sangria = 5;
-        espacio += sangria;
-
-        imprimirDescendente(nodo.getRight(), espacio);
-
-        for (int i = 0; i < espacio; i++) {
-            System.out.print(" ");
-        }
-
-        Interseccion interseccion = nodo.getData();
-        System.out.println(interseccion.getComplejidad());
-        // System.out.println(nodo.getData().toString());
-        imprimirDescendente(nodo.getLeft(), espacio);
-    }
-
-    public Node<Interseccion> getRoot() {
-        return root;
-    }
-
-    public void setRoot(Node<Interseccion> root) {
-        this.root = root;
     }
 
 }
